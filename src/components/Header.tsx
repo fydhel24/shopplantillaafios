@@ -1,6 +1,7 @@
 "use client";
 
 import type React from "react";
+
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Search, X, Menu } from "lucide-react";
@@ -16,26 +17,31 @@ interface Product {
   descripcion?: string;
   precio_extra?: string;
   precio?: string;
-  fotos?: Array<{ id: number; foto: string }>;
+  fotos?: Array<{
+    id: number;
+    foto: string;
+  }>;
 }
 
 const SearchResultCard: React.FC<{
   product: Product;
   onSelect: (productId: string | number) => void;
 }> = ({ product, onSelect }) => {
-  const handleClick = () => onSelect(product.id);
+  const handleClick = () => {
+    onSelect(product.id);
+  };
 
   const productImage =
     product.fotos && product.fotos.length > 0
       ? `https://importadoramiranda.com/storage/${product.fotos[0].foto}`
       : "/placeholder.jpg";
 
-  const price = product.precio_extra || product.precio || "0";
+  const displayPrice = product.precio_extra || product.precio || "0";
 
   return (
     <div
       onClick={handleClick}
-      className="bg-white hover:bg-gray-100 border border-gray-200 rounded-lg overflow-hidden flex cursor-pointer p-3 transition-all duration-300 hover:shadow-md"
+      className="bg-white bg-opacity-80 backdrop-blur-md border border-gray-300 hover:bg-white hover:bg-opacity-100 transition-all duration-300 rounded-lg overflow-hidden shadow-lg flex cursor-pointer p-3 hover:scale-[1.02] transform"
     >
       <div className="w-16 h-16 flex-shrink-0 rounded overflow-hidden shadow-md">
         <img
@@ -48,15 +54,16 @@ const SearchResultCard: React.FC<{
           }}
         />
       </div>
-      <div className="flex-1 pl-3 flex flex-col justify-center">
-        <h3 className="text-sm font-semibold text-gray-800 line-clamp-2">
+
+      <div className="flex-1 p-2">
+        <h3 className="text-sm font-bold text-black line-clamp-2 mb-1">
           {product.nombre}
         </h3>
-        <div className="flex justify-between items-center mt-1">
-          <span className="text-red-600 font-semibold text-sm">
-            Bs. {price}
+        <div className="flex justify-between items-center">
+          <span className="text-black font-bold">
+            Bs. {displayPrice}
           </span>
-          <span className="text-xs text-gray-500 hover:text-red-600 transition-colors">
+          <span className="text-xs text-black/70 hover:text-black transition-colors">
             Ver →
           </span>
         </div>
@@ -78,16 +85,34 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hasFocus = useRef<boolean>(false);
 
+  const handleScroll = () => {
+    const currentScrollY = window.pageYOffset;
+    setIsScrolled(currentScrollY > 50);
+  };
+
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.pageYOffset > 40);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setShowResults(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -96,19 +121,30 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
     setIsMobileSearchOpen(false);
   }, [location.pathname]);
 
-  const fetchProducts = async () => {
+  const fetchCategoriesAndProducts = async () => {
     try {
-      const res = await fetch(`https://importadoramiranda.com/api/lupe/categorias`);
-      const data = await res.json();
-      const products = data.flatMap((c: any) => c.productos || []);
+      setIsLoading(true);
+      const response = await fetch(
+        `https://importadoramiranda.com/api/lupe/categorias`
+      );
+      if (!response.ok) {
+        console.error(`Error: ${response.status} - ${response.statusText}`);
+        return;
+      }
+      const data = await response.json();
+      const products = data.flatMap(
+        (category: any) => category.productos || []
+      );
       setAllProducts(products);
-    } catch (err) {
-      console.error("Error al obtener productos", err);
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchCategoriesAndProducts();
   }, []);
 
   const searchProducts = useCallback(
@@ -119,71 +155,117 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
         return;
       }
       setIsSearching(true);
-      const results = allProducts.filter(
-        (p) =>
-          p.nombre.toLowerCase().includes(query.toLowerCase()) ||
-          p.descripcion?.toLowerCase().includes(query.toLowerCase())
+
+      const filteredResults = allProducts.filter(
+        (product: Product) =>
+          product.nombre.toLowerCase().includes(query.toLowerCase()) ||
+          (product.descripcion &&
+            product.descripcion.toLowerCase().includes(query.toLowerCase())) ||
+          (product.precio && product.precio.toString().includes(query)) ||
+          (product.precio_extra &&
+            product.precio_extra.toString().includes(query))
       );
-      setSearchResults(results);
+
+      setSearchResults(filteredResults);
       setIsSearching(false);
     },
     [allProducts]
   );
 
-  const handleSearchChange = useCallback(
+  const handleSearchInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const query = e.target.value;
       setSearchQuery(query);
-      setShowResults(query.length > 0);
-      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-      searchTimeoutRef.current = setTimeout(() => searchProducts(query), 300);
+
+      if (query.length > 0) {
+        setShowResults(true);
+      } else {
+        setShowResults(false);
+        setSearchResults([]);
+      }
+
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+
+      searchTimeoutRef.current = setTimeout(() => {
+        searchProducts(query);
+      }, 300);
     },
     [searchProducts]
   );
 
-  const handleProductSelect = (id: string | number) => {
-    navigate(`/producto/${id}`);
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim() !== "") {
+      navigate(`/busqueda?q=${encodeURIComponent(searchQuery)}`);
+      setShowResults(false);
+    }
+  };
+
+  const toggleMobileSearch = () => {
+    setIsMobileSearchOpen(!isMobileSearchOpen);
+    if (!isMobileSearchOpen) {
+      setShowResults(false);
+      setSearchQuery("");
+      setTimeout(() => {
+        if (searchInputRef.current) {
+          searchInputRef.current.focus();
+          hasFocus.current = true;
+        }
+      }, 100);
+    }
+  };
+
+  const handleProductSelect = (productId: string | number) => {
+    navigate(`/producto/${productId}`);
     setSearchQuery("");
     setShowResults(false);
     setIsMobileSearchOpen(false);
   };
 
-  const SearchBar = ({
-    searchQuery,
-    onChange,
-    isFullWidth = false,
-  }: {
+  useEffect(() => {
+    if (hasFocus.current && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchResults, showResults, searchQuery]);
+
+  const SearchBar: React.FC<{
     searchQuery: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleSearchInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     isFullWidth?: boolean;
-  }) => (
+  }> = ({ searchQuery, handleSearchInputChange, isFullWidth = false }) => (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (searchQuery.trim())
-          navigate(`/busqueda?q=${encodeURIComponent(searchQuery)}`);
-      }}
-      className={`relative ${isFullWidth ? "w-full" : "max-w-md"}`}
+      onSubmit={handleSearchSubmit}
+      className={`relative ${isFullWidth ? "w-full" : "w-full max-w-md"}`}
     >
-      <div className="relative flex items-center">
-        <Search className="absolute left-3 text-gray-500 h-4 w-4" />
+      <div className="flex items-center relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black/50 h-4 w-4" />
         <input
           ref={searchInputRef}
           type="text"
-          placeholder="Buscar productos..."
+          placeholder="¿Qué estás buscando hoy?"
           value={searchQuery}
-          onChange={onChange}
-          className="w-full px-4 py-2 pl-9 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600 transition-all text-gray-700 placeholder-gray-400 bg-white"
+          onChange={handleSearchInputChange}
+          className="w-full px-4 py-3 pl-10 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black/40 transition-all duration-300 bg-white text-black placeholder-black/50 font-medium shadow-sm"
+          autoComplete="off"
+          onFocus={() => { hasFocus.current = true; }}
+          onBlur={() => { hasFocus.current = false; }}
+          spellCheck={false}
         />
-        {searchQuery && (
+        {searchQuery.length > 0 && (
           <button
             type="button"
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
               setSearchQuery("");
-              setSearchResults([]);
-              if (searchInputRef.current) searchInputRef.current.focus();
+              if (searchInputRef.current) {
+                searchInputRef.current.focus();
+                hasFocus.current = true;
+              }
             }}
-            className="absolute right-3 text-gray-400 hover:text-gray-600"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black/50 hover:text-black transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -192,29 +274,59 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
     </form>
   );
 
-  const SearchResults = ({
-    results,
-    onSelect,
-  }: {
-    results: Product[];
-    onSelect: (id: string | number) => void;
-  }) => (
+  const SearchResults: React.FC<{
+    searchResults: Product[];
+    isSearching: boolean;
+    onProductSelect: (productId: string | number) => void;
+  }> = ({ searchResults, isSearching, onProductSelect }) => (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
-      className="absolute z-50 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-96 overflow-y-auto"
+      className="absolute z-50 mt-2 w-full max-w-md bg-white shadow-lg rounded-xl border border-gray-300 overflow-y-auto max-h-96"
     >
-      <div className="p-3">
-        {results.length > 0 ? (
-          results.slice(0, 6).map((p) => (
-            <SearchResultCard key={p.id} product={p} onSelect={onSelect} />
-          ))
+      <div className="p-4">
+        <div className="flex justify-between items-center border-b border-gray-300 pb-2 mb-3">
+          <h4 className="text-lg font-bold text-black">
+            {isSearching ? "Buscando..." : `Resultados (${searchResults.length})`}
+          </h4>
+          <button
+            onClick={() => {
+              setShowResults(false);
+              if (searchInputRef.current) searchInputRef.current.focus();
+              hasFocus.current = true;
+            }}
+            className="text-black/50 hover:text-black transition-colors"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        {isSearching ? (
+          <div className="p-4 text-center text-black font-semibold">Buscando...</div>
+        ) : searchResults.length > 0 ? (
+          <div className="grid gap-3">
+            {searchResults.slice(0, 5).map((product) => (
+              <motion.div
+                key={`product-${product.id}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                <SearchResultCard product={product} onSelect={onProductSelect} />
+              </motion.div>
+            ))}
+          </div>
         ) : (
-          <p className="text-gray-500 text-center py-6">
-            No se encontraron productos.
-          </p>
+          <div className="text-center py-6">
+            <p className="text-black font-medium">
+              No se encontraron productos que coincidan con tu búsqueda
+            </p>
+            <p className="text-sm text-black/50 mt-2">
+              Intenta con otras palabras o categorías
+            </p>
+          </div>
         )}
       </div>
     </motion.div>
@@ -222,103 +334,118 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
 
   return (
     <motion.header
-      initial={{ y: -80 }}
+      initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 w-full z-50 bg-white transition-all duration-300 ${
-        isScrolled ? "shadow-md" : "shadow-sm"
-      }`}
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ease-in-out font-sans backdrop-blur-md border-b border-gray-300 bg-white text-black`}
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between py-3">
-          {/* LOGO */}
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/logo.png"
-              alt="Logo"
-              className="h-10 w-10 rounded-full border border-gray-300"
-            />
-            <div className="hidden sm:block">
-              <h1 className="text-xl font-semibold text-gray-800">
-                Zona Mayorista
-              </h1>
-              <p className="text-xs text-gray-500">
-                A un clic del producto que necesitas
-              </p>
-            </div>
-          </Link>
-
-          {/* SEARCH BAR */}
-          <div className="hidden md:block w-full max-w-lg relative" ref={searchRef}>
-            <SearchBar searchQuery={searchQuery} onChange={handleSearchChange} />
-            <AnimatePresence>
-              {showResults && (
-                <SearchResults
-                  results={searchResults}
-                  onSelect={handleProductSelect}
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between py-3 md:py-4">
+          <motion.div whileHover={{ scale: 1.02 }} className="flex items-center space-x-3 md:space-x-4">
+            <Link to="/" className="flex items-center gap-2 md:gap-3">
+              <div className="relative h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white border border-gray-300 p-1 flex items-center justify-center overflow-hidden shadow-md">
+                <img
+                  src="/logo.png"
+                  alt="Importadora Miranda"
+                  className="h-full w-auto object-contain"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "https://via.placeholder.com/40x40?text=IM";
+                  }}
                 />
-              )}
-            </AnimatePresence>
+              </div>
+              <div className="hidden md:block">
+                <h1 className="text-lg md:text-xl font-bold text-black tracking-tight">
+                  MiraCode Technology
+                </h1>
+                <p className="text-xs md:text-sm text-black/50 font-medium">
+                  Producto que necesitas
+                </p>
+              </div>
+            </Link>
+          </motion.div>
+
+          <div className="hidden md:flex flex-1 justify-center px-4">
+            <div className="w-full max-w-xl relative" ref={searchRef}>
+              <SearchBar
+                searchQuery={searchQuery}
+                handleSearchInputChange={handleSearchInputChange}
+                isFullWidth
+              />
+              <AnimatePresence>
+                {showResults && searchQuery.trim() !== "" && (
+                  <SearchResults
+                    searchResults={searchResults}
+                    isSearching={isSearching}
+                    onProductSelect={handleProductSelect}
+                  />
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
-          {/* MENU LINKS */}
-          <nav className="hidden md:flex items-center gap-6">
-            {[
-              { path: "/", label: "Inicio" },
-              { path: "/categorias", label: "Categorías" },
-              { path: "/todos-productos", label: "Productos" },
-              { path: "/promociones", label: "Ofertas" },
-            ].map((item) => (
+          <nav className="hidden md:flex items-center space-x-4 md:space-x-6">
+            {[{ path: "/", label: "Home" }, { path: "/categorias", label: "Categorías" }, { path: "/todos-productos", label: "Productos" }, { path: "/promociones", label: "Ofertas" }].map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-sm font-medium transition-all ${
+                className={`relative group font-medium tracking-tight ${
                   currentPath === item.path
-                    ? "text-red-600 border-b-2 border-red-600 pb-1"
-                    : "text-gray-600 hover:text-red-600"
-                }`}
+                    ? "text-black font-bold"
+                    : "text-black/70 hover:text-black"
+                } transition-all duration-300`}
               >
                 {item.label}
+                <span
+                  className={`absolute -bottom-0.5 left-0 w-full h-0.5 bg-black transform transition-transform duration-300 ${
+                    currentPath === item.path ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                  }`}
+                />
               </Link>
             ))}
           </nav>
 
-          {/* MOBILE MENU */}
           <div className="flex md:hidden items-center space-x-3">
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-              className="p-2 rounded-full text-gray-700 hover:bg-gray-100"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={toggleMobileSearch}
+              className="text-black focus:outline-none p-2 hover:bg-gray-200 rounded-full transition-all duration-300 backdrop-blur-sm"
+              aria-label="Toggle search"
             >
               <Search className="h-5 w-5" />
             </motion.button>
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-full text-gray-700 hover:bg-gray-100"
+              className="text-black focus:outline-none p-2 hover:bg-gray-200 rounded-full transition-all duration-300 backdrop-blur-sm"
+              aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </motion.button>
           </div>
         </div>
 
-        {/* MOBILE SEARCH */}
         <AnimatePresence>
           {isMobileSearchOpen && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="md:hidden pb-4"
+              className="md:hidden mb-2 overflow-hidden"
               ref={searchRef}
             >
-              <SearchBar searchQuery={searchQuery} onChange={handleSearchChange} />
+              <SearchBar
+                searchQuery={searchQuery}
+                handleSearchInputChange={handleSearchInputChange}
+                isFullWidth
+              />
               <AnimatePresence>
-                {showResults && (
+                {showResults && searchQuery.trim() !== "" && (
                   <SearchResults
-                    results={searchResults}
-                    onSelect={handleProductSelect}
+                    searchResults={searchResults}
+                    isSearching={isSearching}
+                    onProductSelect={handleProductSelect}
                   />
                 )}
               </AnimatePresence>
@@ -326,30 +453,24 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
           )}
         </AnimatePresence>
 
-        {/* MOBILE MENU */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.nav
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="md:hidden overflow-hidden border-t border-gray-200 mt-2"
+              className="md:hidden overflow-hidden bg-white border border-gray-300 rounded-lg mt-2 shadow-lg"
             >
-              {[
-                { path: "/", label: "Inicio" },
-                { path: "/categorias", label: "Categorías" },
-                { path: "/todos-productos", label: "Productos" },
-                { path: "/promociones", label: "Ofertas" },
-              ].map((item) => (
+              {[{ path: "/", label: "Home" }, { path: "/categorias", label: "Categorías" }, { path: "/todos-productos", label: "Productos" }, { path: "/promociones", label: "Ofertas" }].map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`block px-6 py-3 text-sm font-medium ${
+                  className={`flex items-center gap-3 px-4 py-3 font-medium tracking-tight ${
                     currentPath === item.path
-                      ? "bg-red-50 text-red-700"
-                      : "text-gray-700 hover:bg-gray-50 hover:text-red-600"
-                  }`}
+                      ? "bg-gray-200 text-black font-bold"
+                      : "text-black/70 hover:bg-gray-100 hover:text-black"
+                  } transition-all duration-300 border-b border-gray-300 last:border-0`}
                 >
                   {item.label}
                 </Link>

@@ -8,10 +8,10 @@ const Footer: React.FC = () => {
         
         {/* Información de la empresa */}
         <div className="text-center md:text-left">
-          <h2 className="text-xl font-bold text-gray-900 mb-1 tracking-wide">ELITCODE S.A</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-1 tracking-wide">MiraCode Technology</h2>
           <p className="text-gray-600 text-sm">Av. Buenos Aires 122, La Paz, Bolivia</p>
           <p className="text-gray-600 text-sm">Lunes a Sábado: 09:00 a.m. - 08:00 p.m.</p>
-          <p className="text-gray-600 text-sm">Teléfono: +591 70621016</p>
+          <p className="text-gray-600 text-sm">Celular: +591 70621016</p>
         </div>
 
         {/* Enlaces rápidos */}
@@ -51,7 +51,7 @@ const Footer: React.FC = () => {
       {/* Derechos reservados */}
       <div className="border-t border-gray-200 mt-6 pt-4 text-center">
         <p className="text-xs text-gray-500">
-          © 2024 <span className="font-semibold text-gray-800">ELITCODE S.A</span>. Todos los derechos reservados.
+          © 2024 <span className="font-semibold text-gray-800">MiraCode Technology</span>. Todos los derechos reservados.
         </p>
       </div>
     </footer>
