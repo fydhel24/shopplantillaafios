@@ -1,0 +1,213 @@
+/* Fondo semi-transparente */
+.bg-opacity-50 {
+  background-color: rgba(0, 0, 0, 0.5);  /* Fondo negro con 50% de opacidad */
+}
+
+.cart-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  cursor: pointer;
+}
+.cart-bounce {
+  animation: bounce 0.3s ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.cart-icon-image {
+  width: 70px;  /* Ajusta el tamaño del ícono */
+  height: 70px;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;  /* Ajusta la posición para que se vea sobre el ícono */
+  right: -5px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 5px 10px;
+  font-size: 12px;  /* Ajusta el tamaño de la fuente del número */
+  font-weight: bold;
+}
+
+
+.floating-cart {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  max-width: 600px; /* Ajusta el ancho máximo del carrito */
+  width: 100%;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh; /* Limita la altura del carrito al 80% de la pantalla */
+  overflow-y: auto;  /* Limita la altura máxima del carrito */
+}
+
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px; /* Espacio interno */
+  border-bottom: 1px solid #e0e0e0; /* Línea divisoria */
+  margin-bottom: 8px; /* Espacio entre tarjetas */
+  max-width: 100%; /* Asegura que la tarjeta no se salga del contenedor */
+}
+
+.cart-item img {
+  width: 60px; /* Ancho de la imagen */
+  height: 60px; /* Alto de la imagen */
+  object-fit: cover;
+  border-radius: 8px; /* Redondea los bordes de la imagen */
+}
+
+.cart-item .product-info {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.cart-item h3 {
+  font-size: 16px; /* Tamaño del título del producto */
+  margin: 0;
+}
+
+.cart-item p {
+  font-size: 14px; /* Tamaño del precio o descripción */
+  margin: 0;
+}
+
+.cart-item .quantity-controls {
+  display: flex;
+  align-items: center;
+}
+
+.cart-item button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px; /* Tamaño de los botones de cantidad */
+}
+
+
+
+.checkout-btn {
+  background-color: #c15d46;
+}
+
+.cart-header button {
+  color: red;
+  font-size: 20px;
+}
+
+/* Fondo semi-transparente */
+.bg-opacity-50 {
+  background-color: rgba(0, 0, 0, 0.5);  /* Fondo negro con 50% de opacidad */
+}
+
+.cart-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.cart-icon-image {
+  width: 100px;  /* Ajusta el tamaño del ícono */
+  height: 100px;
+}
+
+.cart-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.floating-cart {
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+
+
+.checkout-btn {
+  background-color: #6b46c1;
+}
+
+.cart-header button {
+  color: red;
+  font-size: 20px;
+  /* Ocultar el carrito flotante por defecto */
+.floating-cart {
+  display: none;
+}
+
+/* Mostrar solo en pantallas pequeñas */
+@media (max-width: 768px) {
+  .floating-cart {
+    display: block;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    background-color: #6b46c1; /* Fondo morado */
+    color: white;
+    padding: 12px 16px;
+    border-radius: 50px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: fit-content;
+  }
+
+  .floating-cart span {
+    margin-left: 8px;
+    font-size: 16px;
+  }
+}
+
+}
+.floating-cart {
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+@media (max-width: 768px) {
+  .floating-cart {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

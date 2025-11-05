@@ -1,0 +1,338 @@
+/* General Layout */
+.formContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centra el contenido verticalmente */
+  align-items: center; /* Centra horizontalmente */
+  padding: 7rem 1rem 1rem; /* Espacio general */
+  background-image: url('../../public//fff3.jpg'); /* Imagen de fondo */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-sizing: border-box; /* Evita problemas con márgenes y padding */
+  position: relative; /* Necesario para el pseudoelemento */
+  z-index: 0; /* Coloca el contenedor en un nivel inferior */
+}
+
+.formContainer::before {
+  content: ""; /* Necesario para crear el pseudoelemento */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+  z-index: -1; /* Coloca el pseudoelemento detrás del contenido */
+}
+
+.formCard {
+  background: rgba(255, 255, 255, 0.1); /* Fondo translúcido */
+  backdrop-filter: blur(10px); /* Efecto de desenfoque */
+  border-radius: 1.5rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px; /* Ancho máximo */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* Sombra elegante */
+  animation: fadeIn 0.6s ease-out;
+  box-sizing: border-box;
+}
+
+/* Typography */
+.title {
+  color: white;
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.label {
+  color: white;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+
+}
+
+/* Inputs and Fields */
+.input, .textarea, select {
+  width: 100%; /* Asegura que ocupen todo el ancho disponible */
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  color: white;
+  outline: none;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.input::placeholder, .textarea::placeholder, select {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input:focus, .textarea:focus, select:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+select option {
+  color: black; /* Opciones visibles */
+}
+
+/* Buttons */
+.button {
+  background: linear-gradient(135deg, #6b46c1, #4299e1);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Steps Indicator */
+.steps {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  gap: 1rem;
+}
+
+.step {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.stepActive {
+  background: linear-gradient(135deg, #6b46c1 0%, #4299e1 100%);
+  border-color: transparent;
+  transform: scale(1.1);
+}
+
+.stepCompleted {
+  background: #4299e1;
+  border-color: transparent;
+}
+
+/* Product Form */
+.productForm {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.field {
+  margin-bottom: -1rem; /* Reduce el margen entre campos */
+}
+
+.textarea {
+  resize: none;
+}
+
+/* Product List */
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.productCard {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.productCard:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.productImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.productName {
+  font-size: 1rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.productDetail {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.editButton {
+  background: #4299e1;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.deleteButton {
+  background: #e53e3e;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Preview Image */
+.previewContainer {
+  margin-top: 1rem;
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: 200px;
+  border: 2px solid white;
+  border-radius: 8px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .formCard {
+    padding: 1.5rem;
+  }
+
+  .input, .textarea, select {
+    padding: 0.65rem;
+  }
+
+  .button {
+    padding: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .input, .textarea, select {
+    font-size: 0.9rem;
+  }
+
+  .button {
+    font-size: 0.9rem;
+  }
+
+  .logo {
+    width: 50px;
+  }
+
+  .companyName {
+    font-size: 1rem;
+  }
+}
+/* Contenedor del encabezado */
+.header {
+  display: flex; /* Alineación flexible */
+  flex-direction: column; /* Elementos en columna */
+  justify-content: center; /* Centrado vertical */
+  align-items: center; /* Centrado horizontal */
+  text-align: center;
+  margin-top: calc(-3cm); /* Mueve el contenedor 2 cm hacia arriba */
+}
+
+/* Logo más pequeño */
+.logo {
+  width: 80px; /* Tamaño ajustado del logo */
+  height: auto; /* Mantener la proporción */
+  margin-bottom: 0.5rem; /* Espacio entre el logo y el texto */
+}
+
+/* Texto centrado más pequeño */
+.companyName {
+  font-size: 1.25rem; /* Reducir tamaño del texto */
+  font-weight: bold;
+  color: white;
+  margin: 0; /* Eliminar márgenes */
+}
+
+/* Título de bienvenida */
+.title {
+  font-size: 1rem; /* Reducir tamaño del texto */
+  color: white;
+  margin-top: 0.5rem; /* Espacio entre el título y el texto principal */
+}
+/*MODAL*/
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  color: #333; /* Color del texto */
+}
+
+.closeButton {
+  background: #4299e1;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}

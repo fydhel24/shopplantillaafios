@@ -1,0 +1,813 @@
+/* General Layout */
+
+.select {
+  background: linear-gradient(135deg, #6b46c1, #4299e1); /* Fondo degradado */
+  color: white; /* Texto blanco */
+  font-weight: bold;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.select:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: linear-gradient(135deg, #5a3cab, #3178c6); /* Fondo al enfocar */
+}
+
+.optionDefault {
+  color: rgba(220, 13, 13, 0.7); /* Color gris claro */
+  font-style: italic;
+}
+
+.option {
+  background: rgba(255, 255, 255, 0.1); /* Fondo translúcido */
+  color: black; /* Texto negro */
+  font-weight: normal;
+  border: none; /* Elimina el contorno blanco */
+  outline: none; /* Elimina el contorno al enfocar */
+}
+
+option:hover {
+  background: rgba(255, 255, 255, 0.3); /* Fondo al pasar el mouse */
+  border: none; /* Asegura que no haya contorno */
+}
+.formContainer {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centra el contenido verticalmente */
+  align-items: center; /* Centra horizontalmente */
+  padding: 7rem 1rem 1rem; /* Espacio general */
+  background-image: url("../../../../public/fff3.jpg"); /* Imagen de fondo */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-sizing: border-box; /* Evita problemas con márgenes y padding */
+  position: relative; /* Necesario para el pseudoelemento */
+  z-index: 0; /* Coloca el contenedor en un nivel inferior */
+}
+
+.formContainer::before {
+  content: ""; /* Necesario para crear el pseudoelemento */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+  z-index: -1; /* Coloca el pseudoelemento detrás del contenido */
+}
+/* Cinta en la parte superior */
+.headerBanner {
+  background-color: #ff6347; /* Puedes elegir otro color */
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+  position: relative;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+.cinta {
+  background-color: #100030; /* Color lila */
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Asegura que se quede encima de otros elementos */
+}
+
+.formContainer {
+  padding-top: 150px; /* Ajusta para que el formulario baje 1 cm más */
+}
+
+.formCard {
+  background: rgba(255, 255, 255, 0.1); /* Fondo translúcido */
+  backdrop-filter: blur(10px); /* Efecto de desenfoque */
+  border-radius: 1.5rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px; /* Ancho máximo */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* Sombra elegante */
+  animation: fadeIn 0.6s ease-out;
+  box-sizing: border-box;
+}
+
+/* Typography */
+.title {
+  color: white;
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.label {
+  color: white;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Inputs and Fields */
+.input,
+.textarea,
+select {
+  width: 100%; /* Asegura que ocupen todo el ancho disponible */
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  color: white;
+  outline: none;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.input::placeholder,
+.textarea::placeholder,
+select {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input:focus,
+.textarea:focus,
+select:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Buttons */
+.button {
+  background: linear-gradient(135deg, #6b46c1, #4299e1);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 40px; /* Ajusta el espacio según sea necesario */
+}
+
+/* Steps Indicator */
+.steps {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  gap: 1rem;
+}
+
+.step {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.stepActive {
+  background: linear-gradient(135deg, #6b46c1 0%, #4299e1 100%);
+  border-color: transparent;
+  transform: scale(1.1);
+}
+
+.stepCompleted {
+  background: #4299e1;
+  border-color: transparent;
+}
+
+/* Product Form */
+.productForm {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.field {
+  margin-bottom: -1rem; /* Reduce el margen entre campos */
+}
+
+.textarea {
+  resize: none;
+}
+
+/* Product List */
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.productCard {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.productCard:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.productImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.productName {
+  font-size: 1rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.productDetail {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.editButton {
+  background: #4299e1;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.deleteButton {
+  background: #e53e3e;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Preview Image */
+.previewContainer {
+  margin-top: 1rem;
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: 200px;
+  border: 2px solid white;
+  border-radius: 8px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .formCard {
+    padding: 1.5rem;
+  }
+
+  .input,
+  .textarea,
+  select {
+    padding: 0.65rem;
+  }
+
+  .button {
+    padding: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .input,
+  .textarea,
+  select {
+    font-size: 0.9rem;
+  }
+
+  .button {
+    font-size: 0.9rem;
+  }
+
+  .logo {
+    width: 50px;
+  }
+
+  .companyName {
+    font-size: 1rem;
+  }
+}
+/* Contenedor del encabezado */
+.header {
+  display: flex; /* Alineación flexible */
+  flex-direction: column; /* Elementos en columna */
+  justify-content: center; /* Centrado vertical */
+  align-items: center; /* Centrado horizontal */
+  text-align: center;
+  margin-top: calc(-3cm); /* Mueve el contenedor 2 cm hacia arriba */
+}
+
+/* Logo más pequeño */
+.logo {
+  width: 80px; /* Tamaño ajustado del logo */
+  height: auto; /* Mantener la proporción */
+  margin-bottom: 0.5rem; /* Espacio entre el logo y el texto */
+}
+
+/* Texto centrado más pequeño */
+.companyName {
+  font-size: 1.25rem; /* Reducir tamaño del texto */
+  font-weight: bold;
+  color: white;
+  margin: 0; /* Eliminar márgenes */
+}
+
+/* Título de bienvenida */
+.title {
+  font-size: 1rem; /* Reducir tamaño del texto */
+  color: white;
+  margin-top: 0.5rem; /* Espacio entre el título y el texto principal */
+}
+/*MODAL*/
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  color: #333; /* Color del texto */
+}
+
+.closeButton {
+  background: #4299e1;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.example {
+  display: block;
+  font-size: 0.85rem;
+  color: #f2f2f2;
+  margin-bottom: 0.5rem;
+}
+
+.errorMessage {
+  color: #ff4d4f;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inputError {
+  border: 2px solid #ff4d4f;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    border-color: #ff4d4f;
+  }
+  50% {
+    border-color: #fdd;
+  }
+}
+
+.button {
+  font-size: 1.2rem;
+  padding: 1rem;
+  background-color: #6b46c1;
+  color: #fff;
+  border-radius: 1rem;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.button:hover {
+  background-color: #5a3cab;
+  transform: scale(1.1);
+}
+.example {
+  font-size: 0.85rem;
+  color: #a0aec0; /* Gris claro */
+  margin-left: 0.5rem;
+}
+.inputError {
+  border: 2px solid #e53e3e; /* Rojo para errores */
+  background: rgba(229, 62, 62, 0.1); /* Fondo rojo claro */
+  animation: shake 0.2s ease-in-out; /* Sacudida para llamar atención */
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+.errorMessage {
+  margin-top: 0.3rem; /* Espacio entre el input y el mensaje de error */
+  font-size: 0.8rem; /* Tamaño más compacto del mensaje */
+}
+.input {
+  padding: 0.6rem; /* Ajusta el relleno interno para inputs más compactos */
+  margin: 0; /* Elimina márgenes extra */
+}
+
+.label {
+  margin-bottom: 0.3rem; /* Espacio entre el label y el input */
+  font-size: 0.9rem; /* Ajusta el tamaño del texto si es necesario */
+}
+.field {
+  margin-bottom: 0.8rem; /* Reduce el margen inferior entre campos */
+}
+
+.suggestionList {
+  position: absolute;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.75rem;
+  margin-top: 0.51rem;
+  z-index: 999;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: white;
+  padding: 0;
+}
+
+.suggestionItem {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.suggestionItem:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+.provinciaButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.provinciaBtn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+  color: white;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  backdrop-filter: blur(4px);
+}
+
+.provinciaBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.provinciaSelected {
+  background: linear-gradient(135deg, #6b46c1, #4299e1);
+  border-color: transparent;
+  color: white;
+}
+
+.concatenado {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  backdrop-filter: blur(6px);
+  font-weight: bold;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+/* General styles for select */
+.select {
+  appearance: none; /* Elimina el estilo nativo del navegador */
+  -webkit-appearance: none; /* Compatibilidad con Safari */
+  background: linear-gradient(135deg, #6b46c1, #4299e1); /* Fondo degradado */
+  color: white; /* Texto blanco */
+  font-weight: bold;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.select:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: linear-gradient(135deg, #5a3cab, #3178c6); /* Fondo al enfocar */
+}
+
+/* Default option style */
+.optionDefault {
+  color: rgba(220, 13, 13, 0.7); /* Color gris claro */
+  font-style: italic;
+}
+
+/* Option styles */
+.option {
+  background: rgba(255, 255, 255, 0.1); /* Fondo translúcido */
+  color: black; /* Texto negro */
+  font-weight: normal;
+  border: none; /* Elimina el contorno blanco */
+  outline: none; /* Elimina el contorno al enfocar */
+}
+
+option:hover {
+  background: rgba(255, 255, 255, 0.3); /* Fondo al pasar el mouse */
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .select {
+    font-size: 1rem; /* Ajusta el tamaño del texto */
+    padding: 0.65rem 0.85rem; /* Ajusta el relleno */
+    background: #6b46c1; /* Fondo sólido para mayor compatibilidad */
+  }
+
+  .option {
+    background: white; /* Fondo blanco para opciones */
+    color: black; /* Texto negro */
+  }
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(25, 0, 50, 0.7);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modalContent {
+    background: linear-gradient(135deg, #7f00ff, #e100ff);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    color: white;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: fadeInModal 0.4s ease-out;
+    border: 2px solid white;
+  }
+
+  @keyframes fadeInModal {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .closeX {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .closeX:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .closeButton {
+    background: white;
+    color: #7f00ff;
+    border: none;
+    border-radius: 1rem;
+    padding: 0.8rem 1.5rem;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .closeButton:hover {
+    background: #f3e8ff;
+    transform: scale(1.05);
+  }
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(34, 0, 51, 0.6); /* fondo morado oscuro translúcido */
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modalContent {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    color: #fff;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    position: relative;
+    animation: fadeInModal 0.3s ease-out;
+    backdrop-filter: blur(12px);
+  }
+
+  @keyframes fadeInModal {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .modalContent h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffe9ff;
+    margin-bottom: 1rem;
+  }
+
+  .modalContent p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #f5f5f5;
+  }
+
+  .modalContent strong {
+    color: #ffd6f7;
+  }
+
+  .phoneNumber {
+    margin: 1rem 0;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.6rem 1rem;
+    border-radius: 1rem;
+    display: inline-block;
+    color: #ffffff;
+  }
+
+  .closeX {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+  }
+
+  .closeX:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .closeButton {
+    margin-top: 1.5rem;
+    background: linear-gradient(135deg, #9f7aea, #ed64a6);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .closeButton:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #b794f4, #f687b3);
+  }
+  input,
+  select,
+  textarea {
+    -webkit-appearance: none; /* Remueve apariencia predeterminada de Safari */
+    background-color: rgba(
+      255,
+      255,
+      255,
+      0.1
+    ); /* Fondo translúcido explícito */
+    backdrop-filter: blur(10px); /* Filtro de desenfoque explícito */
+    color: white; /* Color de texto explícito */
+  }
+
+  /* Además, importante especificar estos estilos para autofill de Safari */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.1) inset !important;
+    -webkit-text-fill-color: white !important;
+  }
+}

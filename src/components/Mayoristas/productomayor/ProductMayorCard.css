@@ -1,0 +1,120 @@
+.card-container {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.card-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.05);
+}
+
+.card-container:hover .carousel .slide img {
+  transform: scale(1.05);
+}
+
+.carousel .slide img {
+  transition: transform 0.3s ease;
+}
+
+/* Mejora de la estrella */
+.star-icon {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  width: 50px;
+  height: 50px;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+  z-index: 30;
+  transform-origin: center;
+  animation: starPulse 2s infinite ease-in-out;
+}
+
+@keyframes starPulse {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Mejora del contenedor de precio y botón */
+.card-container .price-container {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card-container .price-text {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #2563eb;
+}
+
+.card-container .discount-price {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+/* Mejora de los puntos del carousel */
+.card-container .carousel .control-dots {
+  bottom: 10px;
+}
+
+.card-container .carousel .control-dots .dot {
+  box-shadow: none;
+  background: #ffffff;
+  opacity: 0.8;
+  margin: 0 4px;
+}
+
+.card-container .carousel .control-dots .dot.selected {
+  background: #3b82f6;
+  transform: scale(1.2);
+}
+
+/* Mejora del botón de carrito */
+.card-container .cart-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.card-container .cart-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.card-container .cart-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Mejora del aspecto cuando está en el carrito */
+.card-container .remove-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border-radius: 9999px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 20;
+}
+
+.card-container .remove-button:hover {
+  background: rgb(239, 68, 68);
+  transform: scale(1.1);
+}
