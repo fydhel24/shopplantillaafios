@@ -358,7 +358,7 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
                   MiraCode Technology
                 </h1>
                 <p className="text-xs md:text-sm text-black/50 font-medium">
-                  Producto que necesitas
+                  Productos que necesitas
                 </p>
               </div>
             </Link>
