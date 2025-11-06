@@ -1,8 +1,10 @@
-import type React from "react";
-import { useState, useEffect, useCallback } from "react";
+"use client";
+
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import ProductCard from "./prodcucto/ProductCard";
 
+// Interfaz completa (igual que en ProductCard)
 interface Producto {
   id: number;
   nombre: string;
@@ -40,131 +42,293 @@ interface Producto {
   }>;
 }
 
+interface Filtros {
+  categoria: string;
+  marca: string;
+  precioMin: number;
+  precioMax: number;
+}
+
+const FiltrosSidebar: React.FC<{
+  filtros: Filtros;
+  onChange: (nuevosFiltros: Partial<Filtros>) => void;
+  categorias: string[];
+  marcas: string[];
+  rangoGlobal: { min: number; max: number };
+}> = ({ filtros, onChange, categorias, marcas, rangoGlobal }) => {
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm h-fit sticky top-6">
+      <h3 className="font-semibold text-gray-900 mb-4">Filtros</h3>
+
+      <div className="mb-5">
+        <label className="block text-sm font-medium text-gray-900 mb-2">Categoría</label>
+        <select
+          value={filtros.categoria}
+          onChange={(e) => onChange({ categoria: e.target.value })}
+          className="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+        >
+          <option value="">Todas</option>
+          {categorias.map((cat) => (
+            <option key={cat} value={cat} className="text-gray-900">
+              {cat}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-900 mb-2">Marca</label>
+        <select
+          value={filtros.marca}
+          onChange={(e) => onChange({ marca: e.target.value })}
+          className="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+        >
+          <option value="">Todas</option>
+          {marcas.map((marca) => (
+            <option key={marca} value={marca} className="text-gray-900">
+              {marca}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Rango de precios */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-900 mb-2">
+          Precio: Bs. {filtros.precioMin.toLocaleString()} – Bs. {filtros.precioMax.toLocaleString()}
+        </label>
+        <div className="space-y-3">
+          <input
+            type="range"
+            min={rangoGlobal.min}
+            max={rangoGlobal.max}
+            step="1"
+            value={filtros.precioMin}
+            onChange={(e) => onChange({ precioMin: Number(e.target.value) })}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+          />
+          <input
+            type="range"
+            min={rangoGlobal.min}
+            max={rangoGlobal.max}
+            step="1"
+            value={filtros.precioMax}
+            onChange={(e) => onChange({ precioMax: Number(e.target.value) })}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+          />
+        </div>
+        <div className="flex justify-between text-xs text-gray-500 mt-1">
+          <span>Bs. {rangoGlobal.min.toLocaleString()}</span>
+          <span>Bs. {rangoGlobal.max.toLocaleString()}</span>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={() =>
+          onChange({
+            categoria: "",
+            marca: "",
+            precioMin: rangoGlobal.min,
+            precioMax: rangoGlobal.max,
+          })
+        }
+        className="w-full py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 transition"
+      >
+        Restablecer filtros
+      </button>
+    </div>
+  );
+};
+
 const TodosLosProductos: React.FC = () => {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [visibleProducts, setVisibleProducts] = useState<Set<number>>(
-    new Set()
-  );
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [filteredProductos, setFilteredProductos] = useState<Producto[]>([]);
   const [visibleCount, setVisibleCount] = useState<number>(20);
+  const [filtros, setFiltros] = useState<Filtros>({
+    categoria: "",
+    marca: "",
+    precioMin: 0,
+    precioMax: 1000,
+  });
 
-  const fetchTodosLosProductos = useCallback(async () => {
+  const fetchProductos = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
+      setError(null);
+      const response = await axios.get<any>(
         "https://www.importadoramiranda.com/api/lupe/categorias"
       );
-      const productos = response.data.flatMap(
-        (categoria: any) => categoria.productos
+
+      const productosCompletos: Producto[] = response.data.flatMap((categoria: any) =>
+        categoria.productos.map((prod: any) => ({
+          id: prod.id ?? 0,
+          nombre: prod.nombre ?? "Sin nombre",
+          descripcion: prod.descripcion ?? "",
+          precio: prod.precio ?? "0",
+          precio_descuento: prod.precio_descuento ?? "",
+          stock: prod.stock ?? (prod.stock_sucursal_1 ?? 0),
+          estado: prod.estado ?? 1,
+          fecha: prod.fecha ?? "",
+          id_cupo: prod.id_cupo ?? 0,
+          id_tipo: prod.id_tipo ?? 0,
+          id_categoria: prod.id_categoria ?? (prod.categoria?.id ?? 0),
+          id_marca: prod.id_marca ?? (prod.marca?.id ?? 0),
+          created_at: prod.created_at ?? "",
+          updated_at: prod.updated_at ?? "",
+          precio_extra: prod.precio_extra ?? prod.precio ?? "0",
+          stock_sucursal_1: prod.stock_sucursal_1 ?? 0,
+          categoria: prod.categoria ?? { id: 0, categoria: "Sin categoría" },
+          marca: prod.marca ?? { id: 0, marca: "Sin marca" },
+          tipo: prod.tipo ?? { id: 0, tipo: "N/A" },
+          cupo: prod.cupo ?? {
+            id: 0,
+            codigo: "",
+            porcentaje: "",
+            estado: "",
+            fecha_inicio: "",
+            fecha_fin: "",
+          },
+          fotos: Array.isArray(prod.fotos) ? prod.fotos : [],
+          precio_productos: Array.isArray(prod.precio_productos)
+            ? prod.precio_productos
+            : [],
+        }))
       );
-      setProductos(productos);
-      setFilteredProductos(productos);
-      setLoading(false);
-    } catch (error) {
-      setError("No se pudieron cargar los productos.");
+
+      setProductos(productosCompletos);
+    } catch (err) {
+      console.error("Error al cargar productos:", err);
+      setError("No se pudieron cargar los productos. Por favor, intente más tarde.");
+    } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchTodosLosProductos();
-  }, [fetchTodosLosProductos]);
+    fetchProductos();
+  }, [fetchProductos]);
 
-  const observer = useCallback((node: HTMLElement) => {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setVisibleProducts(
-            (prev) => new Set(prev.add(Number.parseInt(entry.target.id)))
-          );
-        }
-      });
+  // ✅ Extraer categorías y marcas únicas
+  const { categoriasUnicas, marcasUnicas } = useMemo(() => {
+    const cats = new Set<string>();
+    const marcas = new Set<string>();
+    productos.forEach((p) => {
+      if (p.categoria?.categoria) cats.add(p.categoria.categoria);
+      if (p.marca?.marca) marcas.add(p.marca.marca);
     });
-    if (node) io.observe(node);
-    return () => io.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const lowerCaseQuery = searchQuery.toLowerCase();
-    setFilteredProductos(
-      productos
-        .filter((producto) =>
-          producto.nombre.toLowerCase().includes(lowerCaseQuery)
-        )
-        .sort((a, b) => {
-          if (a.estado === 1 && b.estado !== 1) return -1;
-          if (a.estado !== 1 && b.estado === 1) return 1;
-          if (a.stock_sucursal_1 > 0 && b.stock_sucursal_1 === 0) return -1;
-          if (a.stock_sucursal_1 === 0 && b.stock_sucursal_1 > 0) return 1;
-          return 0;
-        })
-    );
-  }, [searchQuery, productos]);
-
-  const showMoreProducts = () =>
-    setVisibleCount((prev) => Math.min(prev + 20, filteredProductos.length));
-  const showLessProducts = () =>
-    setVisibleCount((prev) => Math.max(prev - 20, 20));
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const searchBar = document.querySelector(".sticky");
-      if (searchBar) {
-        if (window.scrollY > 100) searchBar.classList.add("compact");
-        else searchBar.classList.remove("compact");
-      }
+    return {
+      categoriasUnicas: Array.from(cats).sort(),
+      marcasUnicas: Array.from(marcas).sort(),
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [productos]);
+
+  // Rango global de precios
+  const rangoPrecios = useMemo(() => {
+    let min = Infinity;
+    let max = -Infinity;
+    productos.forEach((p) => {
+      const precio = parseFloat(String(p.precio_extra).replace(/[^0-9.]/g, "")) || 0;
+      if (precio < min) min = precio;
+      if (precio > max) max = precio;
+    });
+    return {
+      min: min === Infinity ? 0 : Math.floor(min),
+      max: max === -Infinity ? 1000 : Math.ceil(max),
+    };
+  }, [productos]);
+
+  // Ajustar filtros iniciales al rango real
+  useEffect(() => {
+    setFiltros((prev) => ({
+      ...prev,
+      precioMin: rangoPrecios.min,
+      precioMax: rangoPrecios.max,
+    }));
+  }, [rangoPrecios]);
+
+  const getPrecioNumero = (precioStr: any): number => {
+    if (precioStr == null) return 0;
+    const str = String(precioStr).trim();
+    if (str === "") return 0;
+    const cleaned = str.replace(/[^0-9.]/g, "");
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? 0 : num;
+  };
+
+  const productosFiltrados = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
+    return productos.filter((producto) => {
+      const coincideBusqueda = producto.nombre.toLowerCase().includes(query);
+      const coincideCategoria =
+        !filtros.categoria || producto.categoria?.categoria === filtros.categoria;
+      const coincideMarca =
+        !filtros.marca || producto.marca?.marca === filtros.marca;
+      const precio = getPrecioNumero(producto.precio_extra);
+      const dentroRango = precio >= filtros.precioMin && precio <= filtros.precioMax;
+      return coincideBusqueda && coincideCategoria && coincideMarca && dentroRango;
+    });
+  }, [productos, searchQuery, filtros]);
+
+  const showMore = () =>
+    setVisibleCount((prev) => Math.min(prev + 20, productosFiltrados.length));
+  const showLess = () =>
+    setVisibleCount((prev) => Math.max(prev - 20, 20));
 
   if (loading && productos.length === 0) {
     return (
-      <div className="text-center py-20 text-black bg-gray-50">
-        Cargando productos...
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-900 text-lg">Cargando productos...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center py-20 text-cyan-600 bg-gray-50">{error}</div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center p-6 bg-white rounded-lg shadow">
+          <p className="text-red-600 mb-4">{error}</p>
+          <button
+            onClick={fetchProductos}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Reintentar
+          </button>
+        </div>
+      </div>
     );
   }
 
   return (
-    <section className="py-10 px-4 md:px-10 lg:px-20 bg-gray-50 text-black relative min-h-screen font-['Inter',_sans-serif]">
-      <div className="container mx-auto max-w-7xl">
-        <header className="text-center mb-10 mt-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-            Todos los productos
-          </h2>
-          <p className="text-gray-700 font-medium tracking-wide mt-2">
-            Explora todos los productos disponibles
+    <section className="py-20 px-4 bg-gray-50 text-gray-900 min-h-screen font-sans">
+      <div className="max-w-7xl mx-auto">
+        <header className="text-center mb-8 mt-4">
+          <h1 className="text-2xl font-bold text-gray-900">Todos los productos</h1>
+          <p className="text-gray-600 mt-1">
+            {productos.length} productos • {productosFiltrados.length} coincidencias
           </p>
         </header>
 
-        <div className="relative max-w-xl mx-auto bg-white rounded-2xl border border-gray-200 shadow-md overflow-hidden mb-8">
-          <div className="flex items-center px-6 py-4">
+        <div className="max-w-2xl mx-auto mb-8">
+          <div className="relative">
             <input
               type="text"
-              id="search"
               aria-label="Buscar productos"
-              placeholder="Busca entre miles de productos..."
-              className="flex-1 bg-transparent text-black placeholder-gray-400 text-lg font-medium tracking-wide focus:outline-none"
+              placeholder="Buscar por nombre..."
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-900"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setVisibleCount(20);
+              }}
             />
             <svg
-              className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-              width="24"
-              height="24"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
                 strokeLinecap="round"
@@ -176,96 +340,62 @@ const TodosLosProductos: React.FC = () => {
           </div>
         </div>
 
-        <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 justify-items-center py-10">
-          {filteredProductos
-            .slice(0, visibleCount)
-            .map((producto: Producto) => (
-              <div
-                key={producto.id}
-                id={String(producto.id)}
-                ref={(node) => {
-                  if (node) observer(node);
-                }}
-                className="product-card relative rounded-2xl w-full max-w-[200px] shadow-xl bg-white hover:shadow-2xl hover:scale-105 transform transition duration-300 cursor-pointer overflow-hidden flex flex-col items-center"
-                style={{ opacity: visibleProducts.has(producto.id) ? 1 : 0 }}
-              >
-                <div className="w-full h-48 flex items-center justify-center bg-gray-50 overflow-hidden rounded-t-2xl">
-                  <ProductCard
-                    producto={{
-                      ...producto,
-                      stock: producto.stock ?? 0,
-                      precio_extra: producto.precio_extra || producto.precio,
-                    }}
-                    index={producto.id}
-                    cartPosition={{ x: 0, y: 0 }}
-                  />
-                </div>
-                <div className="w-full py-2 px-3 bg-white border-t border-gray-200 text-center">
-                  <span className="block text-gray-700 font-serif text-sm md:text-base truncate">
-                    {producto.nombre}
-                  </span>
-                  <span className="block text-gray-900 font-bold text-base md:text-lg mt-1">
-                    ${producto.precio_extra}
-                  </span>
-                </div>
-              </div>
-            ))}
-        </section>
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="lg:w-64 flex-shrink-0">
+            <FiltrosSidebar
+              filtros={filtros}
+              onChange={(nuevos) => {
+                setFiltros((prev) => ({ ...prev, ...nuevos }));
+                setVisibleCount(20);
+              }}
+              categorias={categoriasUnicas}
+              marcas={marcasUnicas}
+              rangoGlobal={rangoPrecios}
+            />
+          </div>
 
-        <div className="flex justify-center items-center py-6 space-x-4">
-          {visibleCount < filteredProductos.length && (
-            <button
-              onClick={showMoreProducts}
-              className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors ease-in-out duration-300 transform hover:scale-105 shadow font-bold"
-            >
-              Ver más
-            </button>
-          )}
-          {visibleCount > 20 && (
-            <button
-              onClick={showLessProducts}
-              className="px-6 py-3 bg-gray-300 text-black rounded-lg hover:bg-gray-200 transition-colors ease-in-out duration-300 transform hover:scale-105 shadow font-bold"
-            >
-              Ver menos
-            </button>
-          )}
+          <div className="flex-1">
+            {productosFiltrados.length === 0 ? (
+              <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
+                <p className="text-gray-600">No se encontraron productos.</p>
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-wrap gap-4 justify-center">
+                  {productosFiltrados.slice(0, visibleCount).map((producto) => (
+                    <div key={producto.id} className="flex justify-center">
+                      <ProductCard
+                        producto={producto}
+                        index={producto.id}
+                        cartPosition={{ x: 0, y: 0 }}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex justify-center mt-8 gap-3 flex-wrap">
+                  {visibleCount > 20 && (
+                    <button
+                      onClick={showLess}
+                      className="px-5 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                    >
+                      Ver menos
+                    </button>
+                  )}
+                  {visibleCount < productosFiltrados.length && (
+                    <button
+                      onClick={showMore}
+                      className="px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                    >
+                      Ver más ({productosFiltrados.length - visibleCount})
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
-
-      <style>{`
-        ::-webkit-scrollbar {
-          width: 8px;
-          height: 8px;
-        }
-        ::-webkit-scrollbar-thumb {
-          background: #cbd5e1;
-          border-radius: 10px;
-        }
-        ::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.05);
-        }
-        .sticky.compact {
-          padding-top: 0.5rem !important;
-          padding-bottom: 0.5rem !important;
-          transition: padding 0.3s ease-in-out;
-        }
-        .product-card {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          padding: 0;
-          position: relative;
-          border-radius: 12px;
-        }
-        @keyframes fade-in {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.7s ease-out;
-        }
-      `}</style>
     </section>
   );
 };
