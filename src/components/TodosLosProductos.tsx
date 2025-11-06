@@ -20,18 +20,9 @@ interface Producto {
   updated_at: string;
   precio_extra: string;
   stock_sucursal_1: number;
-  categoria: {
-    id: number;
-    categoria: string;
-  };
-  marca: {
-    id: number;
-    marca: string;
-  };
-  tipo: {
-    id: number;
-    tipo: string;
-  };
+  categoria: { id: number; categoria: string };
+  marca: { id: number; marca: string };
+  tipo: { id: number; tipo: string };
   cupo: {
     id: number;
     codigo: string;
@@ -40,10 +31,7 @@ interface Producto {
     fecha_inicio: string;
     fecha_fin: string;
   };
-  fotos: Array<{
-    id: number;
-    foto: string;
-  }>;
+  fotos: Array<{ id: number; foto: string }>;
   precio_productos: Array<{
     id: number;
     precio_unitario: string;
@@ -116,35 +104,26 @@ const TodosLosProductos: React.FC = () => {
     );
   }, [searchQuery, productos]);
 
-  const showMoreProducts = () => {
-    setVisibleCount((prevCount) =>
-      Math.min(prevCount + 20, filteredProductos.length)
-    );
-  };
-
-  const showLessProducts = () => {
-    setVisibleCount((prevCount) => Math.max(prevCount - 20, 20));
-  };
+  const showMoreProducts = () =>
+    setVisibleCount((prev) => Math.min(prev + 20, filteredProductos.length));
+  const showLessProducts = () =>
+    setVisibleCount((prev) => Math.max(prev - 20, 20));
 
   useEffect(() => {
     const handleScroll = () => {
       const searchBar = document.querySelector(".sticky");
       if (searchBar) {
-        if (window.scrollY > 100) {
-          searchBar.classList.add("compact");
-        } else {
-          searchBar.classList.remove("compact");
-        }
+        if (window.scrollY > 100) searchBar.classList.add("compact");
+        else searchBar.classList.remove("compact");
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   if (loading && productos.length === 0) {
     return (
-      <div className="text-center py-20 text-white bg-gradient-to-br from-red-900 via-red-700 to-gray-800">
+      <div className="text-center py-20 text-black bg-gray-50">
         Cargando productos...
       </div>
     );
@@ -152,32 +131,30 @@ const TodosLosProductos: React.FC = () => {
 
   if (error) {
     return (
-      <div className="text-center py-20 text-red-400 bg-gradient-to-br from-red-900 via-red-700 to-gray-800">
-        {error}
-      </div>
+      <div className="text-center py-20 text-cyan-600 bg-gray-50">{error}</div>
     );
   }
 
   return (
-    <section className="py-10 px-4 md:px-10 lg:px-20 bg-gradient-to-br from-red-900 via-red-700 to-gray-800 text-white relative min-h-screen font-sans">
+    <section className="py-10 px-4 md:px-10 lg:px-20 bg-gray-50 text-black relative min-h-screen font-['Inter',_sans-serif]">
       <div className="container mx-auto max-w-7xl">
         <header className="text-center mb-10 mt-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight drop-shadow-lg">
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
             Todos los productos
           </h2>
-          <p className="text-white font-medium tracking-wide flex items-center justify-center space-x-2">
+          <p className="text-gray-700 font-medium tracking-wide mt-2">
             Explora todos los productos disponibles
           </p>
         </header>
 
-        <div className="relative max-w-xl mx-auto bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden">
+        <div className="relative max-w-xl mx-auto bg-white rounded-2xl border border-gray-200 shadow-md overflow-hidden mb-8">
           <div className="flex items-center px-6 py-4">
             <input
               type="text"
               id="search"
               aria-label="Buscar productos"
               placeholder="Busca entre miles de productos..."
-              className="flex-1 bg-transparent text-white placeholder-gray-300 text-lg font-light tracking-wide focus:outline-none"
+              className="flex-1 bg-transparent text-black placeholder-gray-400 text-lg font-medium tracking-wide focus:outline-none"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -209,18 +186,28 @@ const TodosLosProductos: React.FC = () => {
                 ref={(node) => {
                   if (node) observer(node);
                 }}
-                className={`product-card rounded-full aspect-square w-full max-w-[200px] shadow-2xl bg-gray-900 text-white hover:scale-105 transform transition-transform duration-300 cursor-pointer overflow-hidden border border-red-700 transition-opacity animate-fade-in`}
+                className="product-card relative rounded-2xl w-full max-w-[200px] shadow-xl bg-white hover:shadow-2xl hover:scale-105 transform transition duration-300 cursor-pointer overflow-hidden flex flex-col items-center"
                 style={{ opacity: visibleProducts.has(producto.id) ? 1 : 0 }}
               >
-                <ProductCard
-                  producto={{
-                    ...producto,
-                    stock: producto.stock ?? 0,
-                    precio_extra: producto.precio_extra || producto.precio,
-                  }}
-                  index={producto.id}
-                  cartPosition={{ x: 0, y: 0 }}
-                />
+                <div className="w-full h-48 flex items-center justify-center bg-gray-50 overflow-hidden rounded-t-2xl">
+                  <ProductCard
+                    producto={{
+                      ...producto,
+                      stock: producto.stock ?? 0,
+                      precio_extra: producto.precio_extra || producto.precio,
+                    }}
+                    index={producto.id}
+                    cartPosition={{ x: 0, y: 0 }}
+                  />
+                </div>
+                <div className="w-full py-2 px-3 bg-white border-t border-gray-200 text-center">
+                  <span className="block text-gray-700 font-serif text-sm md:text-base truncate">
+                    {producto.nombre}
+                  </span>
+                  <span className="block text-gray-900 font-bold text-base md:text-lg mt-1">
+                    ${producto.precio_extra}
+                  </span>
+                </div>
               </div>
             ))}
         </section>
@@ -229,7 +216,7 @@ const TodosLosProductos: React.FC = () => {
           {visibleCount < filteredProductos.length && (
             <button
               onClick={showMoreProducts}
-              className="px-6 py-3 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors ease-in-out duration-300 transform hover:scale-105 shadow-lg font-bold"
+              className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors ease-in-out duration-300 transform hover:scale-105 shadow font-bold"
             >
               Ver más
             </button>
@@ -237,7 +224,7 @@ const TodosLosProductos: React.FC = () => {
           {visibleCount > 20 && (
             <button
               onClick={showLessProducts}
-              className="px-6 py-3 bg-gray-700 text-white rounded-full hover:bg-gray-600 transition-colors ease-in-out duration-300 transform hover:scale-105 shadow-lg font-bold"
+              className="px-6 py-3 bg-gray-300 text-black rounded-lg hover:bg-gray-200 transition-colors ease-in-out duration-300 transform hover:scale-105 shadow font-bold"
             >
               Ver menos
             </button>
@@ -251,11 +238,11 @@ const TodosLosProductos: React.FC = () => {
           height: 8px;
         }
         ::-webkit-scrollbar-thumb {
-          background: #ef4444; /* Color de la barra de desplazamiento */
+          background: #cbd5e1;
           border-radius: 10px;
         }
         ::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(0, 0, 0, 0.05);
         }
         .sticky.compact {
           padding-top: 0.5rem !important;
@@ -263,22 +250,17 @@ const TodosLosProductos: React.FC = () => {
           transition: padding 0.3s ease-in-out;
         }
         .product-card {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 0;
+          position: relative;
+          border-radius: 12px;
         }
-        /* Animación de entrada */
         @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: scale(0.9);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
         }
         .animate-fade-in {
           animation: fade-in 0.7s ease-out;

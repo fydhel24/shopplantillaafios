@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import ProductCard from "./prodcucto/ProductCard";
-import { motion } from "framer-motion";
 
 interface Producto {
   id: number;
@@ -21,18 +20,9 @@ interface Producto {
   updated_at: string;
   precio_extra: string;
   stock_sucursal_1: number;
-  categoria: {
-    id: number;
-    categoria: string;
-  };
-  marca: {
-    id: number;
-    marca: string;
-  };
-  tipo: {
-    id: number;
-    tipo: string;
-  };
+  categoria: { id: number; categoria: string };
+  marca: { id: number; marca: string };
+  tipo: { id: number; tipo: string };
   cupo: {
     id: number;
     codigo: string;
@@ -41,10 +31,7 @@ interface Producto {
     fecha_inicio: string;
     fecha_fin: string;
   };
-  fotos: Array<{
-    id: number;
-    foto: string;
-  }>;
+  fotos: Array<{ id: number; foto: string }>;
   precio_productos: Array<{
     id: number;
     precio_unitario: string;
@@ -122,7 +109,7 @@ const CategoriaProductos: React.FC = () => {
 
   if (loading && productos.length === 0) {
     return (
-      <div className="text-center py-20 text-white bg-gradient-to-br from-red-900 via-red-700 to-gray-800 font-sans">
+      <div className="text-center py-20 text-black bg-white font-sans">
         Cargando productos...
       </div>
     );
@@ -130,49 +117,39 @@ const CategoriaProductos: React.FC = () => {
 
   if (error) {
     return (
-      <div className="text-center py-20 text-red-400 bg-gradient-to-br from-red-900 via-red-700 to-gray-800 font-sans">
+      <div className="text-center py-20 text-red-600 bg-white font-sans">
         {error}
       </div>
     );
   }
 
   return (
-    <section className="py-20 px-4 md:px-10 lg:px-20 bg-gradient-to-br from-red-900 via-red-700 to-gray-800 text-white relative min-h-screen font-sans">
+    <section className="py-20 px-4 md:px-10 lg:px-20 bg-white text-black relative min-h-screen font-sans">
       <div className="container mx-auto max-w-7xl">
         <header className="text-center mb-12 mt-16">
-          <motion.h2
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-4xl md:text-5xl font-extrabold tracking-tight drop-shadow-lg"
-          >
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
             Productos en {categoryName}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-red-300 mt-2 text-lg font-medium"
-          >
+          </h2>
+          <p className="text-gray-700 mt-2 text-lg font-medium">
             Explora los mejores productos disponibles en esta categoría
-          </motion.p>
+          </p>
         </header>
 
-        <div className="sticky top-20 z-20 bg-gray-900/80 backdrop-blur-md rounded-full py-2 mb-10 shadow-lg max-w-xl mx-auto">
-          <div className="relative">
+        <div className="sticky top-20 z-20 bg-white py-2 mb-10 shadow-sm w-full flex justify-end pr-4">
+          <div className="relative w-56 sm:w-64">
             <input
               type="text"
               id="search"
               aria-label="Buscar productos"
-              placeholder="Busca un producto en esta categoría..."
-              className="w-full px-5 py-3 rounded-full border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-400 transition-shadow duration-300 hover:shadow-xl"
+              placeholder="Buscar..."
+              className="w-full px-4 py-2 rounded-full border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all duration-300 text-sm"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <svg
-              className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-              width="24"
-              height="24"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              width="20"
+              height="20"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -187,25 +164,16 @@ const CategoriaProductos: React.FC = () => {
           </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 justify-items-center"
-        >
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 justify-items-center">
           {productosOrdenados.map((producto: Producto) => (
-            <motion.div
+            <div
               key={producto.id}
               id={String(producto.id)}
               ref={(node) => {
                 if (node) observer(node);
               }}
-              className={`product-card relative rounded-t-lg rounded-b-[40%] shadow-2xl bg-white bg-opacity-5 backdrop-blur-md text-white hover:scale-105 transform transition-transform duration-300 cursor-pointer overflow-hidden border border-gray-700 transition-opacity animate-fade-in`}
+              className="product-card relative rounded-lg shadow-md bg-white border border-gray-200 cursor-pointer overflow-hidden p-4 flex flex-col items-center"
               style={{ opacity: visibleProducts.has(producto.id) ? 1 : 0 }}
-              whileHover={{
-                y: -10,
-                boxShadow: "0 25px 50px -12px rgba(239, 68, 68, 0.25)",
-              }}
             >
               <ProductCard
                 producto={{
@@ -216,47 +184,37 @@ const CategoriaProductos: React.FC = () => {
                 index={producto.id}
                 cartPosition={{ x: 0, y: 0 }}
               />
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
         {loading && productos.length > 0 && (
           <div className="flex justify-center items-center py-6">
-            <p className="text-lg text-red-300">Cargando más productos...</p>
+            <p className="text-lg text-gray-700">Cargando más productos...</p>
           </div>
         )}
       </div>
+
       <style>{`
         ::-webkit-scrollbar {
           width: 8px;
           height: 8px;
         }
         ::-webkit-scrollbar-thumb {
-          background: #ef4444; 
+          background: #cbd5e1; 
           border-radius: 10px;
         }
         ::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(0, 0, 0, 0.05);
         }
         .product-card {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            position: relative;
-        }
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: scale(0.9);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.7s ease-out;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 0;
+          position: relative;
+          border-radius: 12px;
         }
       `}</style>
     </section>

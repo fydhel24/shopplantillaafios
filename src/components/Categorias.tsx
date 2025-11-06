@@ -26,7 +26,7 @@ const AnimatedBackground: React.FC = () => {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none">
       <motion.div
-        className="absolute -right-1/3 -top-1/3 w-2/3 h-2/3 rounded-full bg-gradient-to-br from-red-400/15 to-gray-600/10"
+        className="absolute -right-1/3 -top-1/3 w-2/3 h-2/3 rounded-full bg-gradient-to-br from-gray-300/15 to-gray-400/10"
         animate={{
           scale: [1, 1.2, 1],
           x: [0, 50, 0],
@@ -40,7 +40,7 @@ const AnimatedBackground: React.FC = () => {
         }}
       />
       <motion.div
-        className="absolute -left-1/3 -bottom-1/3 w-2/3 h-2/3 rounded-full bg-gradient-to-tr from-red-600/12 to-gray-500/15"
+        className="absolute -left-1/3 -bottom-1/3 w-2/3 h-2/3 rounded-full bg-gradient-to-tr from-gray-400/12 to-gray-500/15"
         animate={{
           scale: [1.1, 0.9, 1.1],
           x: [0, -40, 0],
@@ -54,7 +54,7 @@ const AnimatedBackground: React.FC = () => {
         }}
       />
       <motion.div
-        className="absolute top-1/4 right-1/4 w-1/2 h-1/2 rounded-full bg-gradient-to-r from-white/5 to-gray-400/8"
+        className="absolute top-1/4 right-1/4 w-1/2 h-1/2 rounded-full bg-gradient-to-r from-white/5 to-gray-300/8"
         animate={{
           scale: [0.8, 1.3, 0.8],
           rotate: [0, 180, 360],
@@ -82,11 +82,11 @@ const SearchBar: React.FC<{
       transition={{ duration: 0.6, delay: 0.3 }}
     >
       <div className="relative max-w-xl mx-auto">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-red-600/20 rounded-2xl blur-xl"></div>
-        <div className="relative bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden">
+        <div className="absolute inset-0 bg-white/20 rounded-2xl blur-xl"></div>
+        <div className="relative bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
           <div className="flex items-center px-6 py-4">
             <motion.svg
-              className="w-6 h-6 text-red-300 mr-4"
+              className="w-6 h-6 text-gray-500 mr-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -108,17 +108,17 @@ const SearchBar: React.FC<{
                 setSearchQuery(e.target.value);
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="flex-1 bg-transparent text-white placeholder-gray-300 text-lg font-light tracking-wide focus:outline-none"
+              className="flex-1 bg-transparent text-black placeholder-gray-400 text-lg font-medium tracking-wide focus:outline-none"
             />
             {searchQuery && (
               <motion.button
                 onClick={() => setSearchQuery("")}
-                className="ml-4 p-2 hover:bg-red-500/20 rounded-lg transition-colors"
+                className="ml-4 p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
                 <svg
-                  className="w-5 h-5 text-red-400"
+                  className="w-5 h-5 text-gray-600"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -139,7 +139,7 @@ const SearchBar: React.FC<{
 
 const ProductGrid: React.FC<{ products: Product[] }> = ({ products }) => {
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-4">
       {products.slice(0, 4).map((product, index) => (
         <motion.div
           key={product.id}
@@ -147,18 +147,15 @@ const ProductGrid: React.FC<{ products: Product[] }> = ({ products }) => {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: index * 0.1 }}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.03 }}
         >
-          <div className="relative aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-white/10">
+          <div className="relative aspect-square rounded-xl overflow-hidden bg-white border border-gray-200 shadow-sm">
             {product.fotos.length > 0 ? (
-              <div className="relative w-full h-full">
-                <img
-                  src={`https://importadoramiranda.com/storage/${product.fotos[0].foto}`}
-                  alt={product.nombre}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-              </div>
+              <img
+                src={`https://importadoramiranda.com/storage/${product.fotos[0].foto}`}
+                alt={product.nombre}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
                 <svg
@@ -175,12 +172,12 @@ const ProductGrid: React.FC<{ products: Product[] }> = ({ products }) => {
               </div>
             )}
 
-            <div className="absolute bottom-2 right-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-lg">
+            <div className="absolute bottom-2 right-2 bg-black text-white text-xs font-semibold px-2 py-1 rounded-lg shadow">
               Bs.{product.precio_extra}
             </div>
           </div>
 
-          <h4 className="mt-2 text-xs text-gray-300 font-medium truncate group-hover:text-white transition-colors">
+          <h4 className="mt-2 text-sm text-black font-medium truncate">
             {product.nombre}
           </h4>
         </motion.div>
@@ -206,33 +203,21 @@ const CategoryCard: React.FC<{
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      <div className="relative h-full">
+      <div className="relative">
         <motion.div
-          className="relative bg-gradient-to-br from-white/8 to-gray-500/5 backdrop-blur-xl rounded-3xl border border-white/15 shadow-2xl overflow-hidden p-6 h-full min-h-[500px] flex flex-col"
+          className="bg-white rounded-3xl border border-gray-200 shadow-md overflow-hidden p-6 flex flex-col min-h-[450px]"
           whileHover={{
-            y: -10,
+            y: -5,
             scale: 1.02,
-            transition: { duration: 0.4, ease: "easeOut" },
+            transition: { duration: 0.3, ease: "easeOut" },
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-
-          <div className="relative mb-6">
-            <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-red-600/20 rounded-2xl blur-lg"></div>
-            <div className="relative bg-gradient-to-r from-red-500/80 to-red-600/80 backdrop-blur-sm rounded-2xl p-4 text-center border border-red-400/30">
-              <motion.h2
-                className="text-xl font-medium text-white tracking-wide uppercase"
-                animate={{
-                  textShadow: isHovered
-                    ? "0 0 20px rgba(255,255,255,0.5)"
-                    : "0 0 0px rgba(255,255,255,0)",
-                }}
-              >
-                {category.categoria}
-              </motion.h2>
-              <div className="text-red-200 text-sm font-light mt-1">
-                {category.productos.length} productos disponibles
-              </div>
+          <div className="relative mb-6 text-center">
+            <h2 className="text-2xl font-semibold text-black tracking-tight">
+              {category.categoria}
+            </h2>
+            <div className="text-gray-600 text-sm mt-1">
+              {category.productos.length} productos disponibles
             </div>
           </div>
 
@@ -240,60 +225,30 @@ const CategoryCard: React.FC<{
             <ProductGrid products={category.productos} />
           </div>
 
-          <div className="relative">
-            <motion.div
-              className="bg-gradient-to-r from-red-500/20 to-red-600/20 backdrop-blur-sm rounded-2xl p-4 border border-red-400/20 text-center"
-              whileHover={{
-                background:
-                  "linear-gradient(to right, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.3))",
-                borderColor: "rgba(239, 68, 68, 0.4)",
-              }}
+          <div className="text-center">
+            <motion.button
+              className="bg-black text-white font-medium px-4 py-2 rounded-lg shadow hover:bg-gray-800 transition-colors flex items-center justify-center space-x-2 mx-auto"
+              whileHover={{ scale: 1.05 }}
             >
-              <motion.span
-                className="text-white font-medium tracking-wide flex items-center justify-center space-x-2"
-                whileHover={{ scale: 1.05 }}
+              <span>Explorar Colección</span>
+              <motion.svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                animate={{ x: isHovered ? 5 : 0 }}
+                transition={{ duration: 0.3 }}
               >
-                <span>Explorar Colección</span>
-                <motion.svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  animate={{ x: isHovered ? 5 : 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </motion.svg>
-              </motion.span>
-            </motion.div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </motion.svg>
+            </motion.button>
           </div>
-
-          <motion.div
-            className="absolute top-4 right-4 w-3 h-3 rounded-full bg-red-400"
-            animate={{
-              scale: isHovered ? 1.5 : 1,
-              opacity: isHovered ? 1 : 0.5,
-              boxShadow: isHovered
-                ? "0 0 20px rgba(239, 68, 68, 0.6)"
-                : "0 0 0px rgba(239, 68, 68, 0)",
-            }}
-            transition={{ duration: 0.3 }}
-          />
         </motion.div>
-
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-red-500/20 to-red-600/20 rounded-3xl blur-xl -z-10"
-          animate={{
-            opacity: isHovered ? 0.6 : 0.2,
-            scale: isHovered ? 1.05 : 1,
-          }}
-          transition={{ duration: 0.4 }}
-        />
       </div>
     </motion.div>
   );
@@ -333,14 +288,14 @@ const Categorias: React.FC = () => {
 
   if (loading)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-700 to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <motion.div
           className="flex flex-col items-center space-y-4"
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
         >
-          <div className="w-16 h-16 border-4 border-red-400 border-t-transparent rounded-full animate-spin"></div>
-          <div className="text-white text-xl font-light">
+          <div className="w-16 h-16 border-4 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+          <div className="text-black text-xl font-medium">
             Cargando categorías...
           </div>
         </motion.div>
@@ -349,14 +304,14 @@ const Categorias: React.FC = () => {
 
   if (error)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-700 to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <motion.div
-          className="text-center bg-white/10 backdrop-blur-xl px-12 py-8 rounded-3xl border border-white/20 shadow-2xl"
+          className="text-center bg-white rounded-3xl p-12 border border-gray-200 shadow-md"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
         >
-          <div className="text-red-300 text-xl font-light mb-2">{error}</div>
-          <div className="text-gray-400 text-sm">
+          <div className="text-black text-xl font-medium mb-2">{error}</div>
+          <div className="text-gray-600 text-sm">
             Intenta recargar la página
           </div>
         </motion.div>
@@ -364,28 +319,25 @@ const Categorias: React.FC = () => {
     );
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-red-900 via-red-700 to-gray-800 text-white relative font-['Inter',_'SF_Pro_Display',_system-ui,_sans-serif]">
+    <section className="min-h-screen bg-gray-50 text-black relative font-['Inter',_sans-serif]">
       <AnimatedBackground />
-
-      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/15"></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-red-900/20 via-transparent to-gray-800/20"></div>
 
       <div className="container mx-auto max-w-7xl px-4 py-12 relative z-10">
         <header className="text-center mb-10 mt-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight drop-shadow-lg">
-            Nuestras Categorias
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
+            Nuestras Categorías
           </h2>
-          <p className="text-white font-medium tracking-wide flex items-center justify-center space-x-2">
-            Descubre nuestra amplia gama de productos organizados en categorías especialmente para ti
+          <p className="text-gray-700 font-medium tracking-wide mt-2">
+            Descubre nuestra amplia gama de productos organizados en categorías
+            especialmente para ti
           </p>
         </header>
-        
 
         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
         <AnimatePresence>
           <motion.div
-            className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-12"
             layout
           >
             {filteredCategories.map((category, index) => (
@@ -405,9 +357,9 @@ const Categorias: React.FC = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
           >
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-12 border border-white/20 max-w-md mx-auto">
+            <div className="bg-white rounded-3xl p-12 border border-gray-200 shadow-md max-w-md mx-auto">
               <svg
-                className="w-16 h-16 text-red-300 mx-auto mb-4"
+                className="w-16 h-16 text-gray-400 mx-auto mb-4"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -417,10 +369,10 @@ const Categorias: React.FC = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              <h3 className="text-xl font-light text-white mb-2">
+              <h3 className="text-xl font-medium text-black mb-2">
                 No encontramos resultados
               </h3>
-              <p className="text-gray-300 text-sm">
+              <p className="text-gray-600 text-sm">
                 Intenta con otros términos de búsqueda
               </p>
             </div>

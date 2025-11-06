@@ -87,7 +87,8 @@ const CategoryCircle: React.FC<{
                     ? `${currentProduct.nombre.substring(0, 22)}...`
                     : currentProduct.nombre}
                 </h4>
-                <span className="mt-1 bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                <span className="mt-1 bg-cyan-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                
                   Bs.{" "}
                   {currentProduct.precio_extra !== "0.00"
                     ? currentProduct.precio_extra
@@ -250,7 +251,8 @@ const CategoriasUno: React.FC = () => {
         <div className="flex justify-center mt-16">
           <motion.button
             onClick={() => (window.location.href = "/categorias")}
-            className="bg-red-600 hover:bg-red-700 text-black px-8 py-4 rounded-full font-medium shadow-md"
+            className="bg-cyan-500 hover:bg-cyan-600 focus:ring-cyan-400 text-white px-8 py-4 rounded-full font-medium shadow-md"
+            
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

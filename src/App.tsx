@@ -105,33 +105,23 @@ const CartIcon: React.FC<{ onOpenCart: () => void }> = ({ onOpenCart }) => {
 
   return (
     <div
-      className={`fixed bottom-4 right-4 ${
-        isMayoristaRoute ? "bg-blue-600" : "bg-red-600"
-      } text-white border border-gray-300 shadow-lg p-4 rounded-full cursor-pointer flex items-center`}
+      className={`fixed bottom-4 right-4 flex items-center justify-center cursor-pointer shadow-lg rounded-full p-4 transition-transform duration-300 hover:scale-110 ${
+        isMayoristaRoute ? "bg-blue-600" : "bg-white-600"
+      }`}
       onClick={onOpenCart}
       style={{ zIndex: 1000 }}
     >
-      <span style={{ fontSize: "32px" }}>🛒</span>
+      {/* Ícono del carrito */}
+      <span className="text-4xl">🛒</span>
+
+      {/* Contador de productos */}
       {totalItems > 0 && (
         <span
-          className="absolute top-0 right-0 bg-red-600 text-white rounded-full h-8 w-8 flex items-center justify-center text-lg font-bold"
-          style={{ transform: "translate(50%, -50%)" }}
+          className="absolute top-1 right-1 bg-cyan-600 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold border-2 border-white"
+          style={{ transform: "translate(40%, -40%)" }}
         >
           {totalItems}
         </span>
-      )}
-      {isSmallScreen && (
-        <div className="ml-4 text-left bg-white text-black p-2 rounded-lg shadow-lg border border-gray-200">
-          <p className="text-sm">{totalItems} productos</p>
-          <button
-            className={`mt-2 px-4 py-2 ${
-              isMayoristaRoute ? "bg-blue-600" : "bg-red-600"
-            } text-white rounded-lg text-sm`}
-            onClick={onOpenCart}
-          >
-            Ver Carrito
-          </button>
-        </div>
       )}
     </div>
   );
@@ -280,114 +270,6 @@ const HomePage: React.FC = () => {
 
   return (
     <>
-      {/* Embedded styles */}
-      <style>{`
-        @keyframes float {
-          0% {
-            transform: translateY(0) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-100px) rotate(180deg);
-          }
-          100% {
-            transform: translateY(0) rotate(360deg);
-          }
-        }
-
-        @keyframes gradient {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-
-        .falling-logo {
-          position: absolute;
-          top: -100px;
-          animation-name: fall;
-          animation-timing-function: linear;
-          animation-iteration-count: infinite;
-          z-index: 1;
-          pointer-events: none;
-        }
-
-        @keyframes fall {
-          0% {
-            transform: translateY(-100px) rotate(0deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: 0.7;
-          }
-          90% {
-            opacity: 0.7;
-          }
-          100% {
-            transform: translateY(calc(100vh + 100px)) rotate(360deg);
-            opacity: 0;
-          }
-        }
-
-        .falling-background {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-          z-index: 0;
-        }
-
-        .animate-pulse {
-          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.7;
-          }
-        }
-
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradient 3s ease infinite;
-        }
-
-        .animate-spin {
-          animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        .animate-in {
-          animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-      `}</style>
-
       <div className="min-h-screen bg-gradient-to-br from-teal-800 via-cyan-600 to-teal-900 overflow-hidden">
         <div className="falling-background relative">
           {fallingImages.map((image) => (
@@ -414,12 +296,11 @@ const HomePage: React.FC = () => {
         </section>
         <section>
           <div>
-              <ProductCarousel
-                products={products.filter((product) => product.stock > 0)}
-              />
-            </div>
+            <ProductCarousel
+              products={products.filter((product) => product.stock > 0)}
+            />
+          </div>
         </section>
-        
 
         {/* 
         <section>

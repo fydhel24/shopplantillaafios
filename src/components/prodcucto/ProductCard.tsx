@@ -216,10 +216,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
             disabled={producto.stock_sucursal_1 === 0}
             className={`flex items-center justify-center p-4 rounded-full shadow-lg transition-all transform hover:scale-105 ${
               producto.stock_sucursal_1 === 0 
-                ? "bg-red-700 cursor-not-allowed opacity-50" 
+                ? "bg-cyan-700 cursor-not-allowed opacity-50" 
                 : isInCart(producto.id)
                 ? "bg-green-600"
-                : "bg-red-600 hover:bg-purple-700"
+                : "bg-cyan-600 hover:bg-blue-700"
             }`}
           >
             <i className="fas fa-shopping-cart text-white text-xl"></i>
@@ -228,7 +228,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {isInCart(producto.id) && (
             <button
               onClick={(e) => handleRemoveFromCart(e)}
-              className="p-4 bg-red-600 text-white rounded-full shadow-lg hover:bg-red-700 transition-all transform hover:scale-105"
+              className="p-4 bg-cyan-600 text-white rounded-full shadow-lg hover:bg-cyan-700 transition-all transform hover:scale-105"
             >
               ✖
             </button>

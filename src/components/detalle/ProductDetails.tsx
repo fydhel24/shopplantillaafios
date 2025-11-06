@@ -1,6 +1,17 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Star, Minus, Plus, ShoppingCart, Heart } from "lucide-react";
+import {
+  Star,
+  Minus,
+  Plus,
+  ShoppingCart,
+  Heart,
+  ArrowLeft,
+  Share2,
+  Truck,
+  Shield,
+  RotateCcw,
+} from "lucide-react";
 import { useCart } from "../carrito/CarritoContext";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -37,7 +48,7 @@ interface Product {
   descripcion: string;
   precio: string;
   fotos: Foto[];
-  imageUrl?: string; // Añadimos imageUrl aquí
+  imageUrl?: string;
 }
 
 const ProductDetails: React.FC = () => {
@@ -53,7 +64,7 @@ const ProductDetails: React.FC = () => {
   const [showZoom, setShowZoom] = useState(false);
   const [product] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
-  const navigate = useNavigate(); // Inicializa useNavigate para navegar entre rutas
+  const navigate = useNavigate();
 
   const manejarClicImagen = (id: number) => {
     navigate(`/producto/${id}`);
@@ -70,18 +81,6 @@ const ProductDetails: React.FC = () => {
             throw new Error("Error al obtener los detalles del producto");
           const data = await response.json();
           setProductDetails(data);
-
-          if (data.precio_extra) {
-            console.log("Precio extra:", data.precio_extra);
-          } else {
-            console.log("No se encontró precio extra.");
-          }
-
-          if (data.categoria && data.categoria.id) {
-            console.log("ID de la categoría:", data.categoria.id);
-          } else {
-            console.log("El producto no tiene una categoría asociada.");
-          }
         } catch (err) {
           setError(err instanceof Error ? err.message : "Error desconocido");
         } finally {
@@ -99,12 +98,9 @@ const ProductDetails: React.FC = () => {
           const response = await fetch(
             `https://importadoramiranda.com/api/lupe/filtro_categorias?id_categoria=${productDetails.categoria.id}`
           );
-
           if (!response.ok)
             throw new Error("Error al obtener productos relacionados");
-
           const data = await response.json();
-
           if (data.length > 0 && data[0].productos) {
             const filteredProducts = data[0].productos
               .filter((prod: Product) => prod.id !== productDetails.id)
@@ -113,9 +109,8 @@ const ProductDetails: React.FC = () => {
                 imageUrl:
                   prod.fotos.length > 0
                     ? `https://importadoramiranda.com/storage/${prod.fotos[0].foto}`
-                    : "https://via.placeholder.com/150", // Imagen de respaldo
+                    : "https://via.placeholder.com/150",
               }));
-
             setRelatedProducts(filteredProducts);
           } else {
             setRelatedProducts([]);
@@ -125,7 +120,6 @@ const ProductDetails: React.FC = () => {
           setRelatedProducts([]);
         }
       };
-
       fetchRelatedProducts();
     }
   }, [productDetails]);
@@ -151,74 +145,100 @@ const ProductDetails: React.FC = () => {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-red-900 via-red-700 to-gray-800 font-sans">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 font-sans">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-16 h-16 border-4 border-red-400 border-t-transparent rounded-full shadow-lg"
+          className="w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full"
         />
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="ml-4 text-2xl font-bold text-white drop-shadow-lg"
+          className="mt-6 text-xl font-medium text-slate-700"
         >
-          Cargando producto...
+          Cargando detalles del producto...
         </motion.p>
       </div>
     );
+
   if (error || !productDetails)
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-red-900 via-red-700 to-gray-800 font-sans">
-        <div className="bg-white bg-opacity-5 backdrop-blur-md border border-white/10 rounded-xl p-8 shadow-2xl">
-          <p className="text-red-400 text-2xl font-bold text-center drop-shadow">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 font-sans">
+        <div className="bg-white rounded-3xl p-8 shadow-2xl border border-slate-200 max-w-md text-center">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-2xl">⚠️</span>
+          </div>
+          <p className="text-red-500 text-lg font-semibold mb-2">
             {error || "No se encontraron detalles del producto"}
           </p>
+          <button
+            onClick={() => navigate(-1)}
+            className="mt-4 px-6 py-2 bg-slate-800 text-white rounded-full hover:bg-slate-700 transition-colors"
+          >
+            Volver atrás
+          </button>
         </div>
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-700 to-gray-800 text-white font-sans">
-      <div className="container mx-auto px-4 py-8 md:py-40">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 text-slate-900 font-sans">
+      {/* Header con navegación */}
+      <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-40">
+        <div className="container mx-auto px-4 py-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-slate-600 hover:text-slate-800 transition-colors group"
+          >
+            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            <span className="font-medium">Volver</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-12"
+          className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12"
         >
-          {/* Galería de Imágenes */}
-          <div className="space-y-4">
+          {/* Galería de imágenes - Nuevo diseño */}
+          <div className="space-y-6">
             <motion.div
               layoutId={`product-image-${selectedImage}`}
-              className="relative aspect-square rounded-2xl overflow-hidden bg-white bg-opacity-5 backdrop-blur-md border border-white/10 shadow-2xl"
-              whileHover={{
-                scale: 1.02,
-                boxShadow: "0 25px 50px -12px rgba(255, 0, 0, 0.25)",
-              }}
+              className="relative aspect-square rounded-3xl overflow-hidden bg-white shadow-2xl border border-slate-200"
+              whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.3 }}
             >
               {productDetails.fotos?.[selectedImage]?.foto && (
                 <img
                   src={`https://importadoramiranda.com/storage/${productDetails.fotos[selectedImage].foto}`}
                   alt={productDetails.nombre}
-                  className="w-full h-full object-contain hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                  className="w-full h-full object-contain cursor-zoom-in p-4"
                   onClick={() => setShowZoom(true)}
                 />
               )}
+              {/* Badge de destacado */}
+              <div className="absolute top-4 left-4">
+                <span className="bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
+                  Destacado
+                </span>
+              </div>
             </motion.div>
 
-            {/* Miniaturas */}
-            <div className="grid grid-cols-4 gap-4">
+            {/* Miniaturas mejoradas */}
+            <div className="flex gap-3 overflow-x-auto pb-4">
               {productDetails.fotos?.map((foto: any, index: number) => (
                 <motion.button
                   key={index}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setSelectedImage(index)}
-                  className={`relative aspect-square rounded-lg overflow-hidden bg-white bg-opacity-5 backdrop-blur-md border border-white/10 ${
+                  className={`flex-shrink-0 relative aspect-square w-20 rounded-2xl overflow-hidden border-2 transition-all duration-200 ${
                     selectedImage === index
-                      ? "ring-2 ring-red-400 shadow-xl shadow-red-400/50"
-                      : ""
-                  } hover:shadow-lg transition-all duration-300`}
+                      ? "border-blue-500 shadow-lg scale-105"
+                      : "border-slate-200 hover:border-slate-300"
+                  }`}
                 >
                   <img
                     src={`https://importadoramiranda.com/storage/${foto.foto}`}
@@ -230,70 +250,83 @@ const ProductDetails: React.FC = () => {
             </div>
           </div>
 
-          {/* Información del Producto */}
+          {/* Información del producto - Rediseñada */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="space-y-6"
+            className="space-y-8"
           >
-            <div className="flex justify-between items-start">
-              <h1 className="text-4xl md:text-5xl font-extrabold mb-2 drop-shadow-lg tracking-tight">
-                {productDetails.nombre}
-              </h1>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setIsLiked(!isLiked)}
-                className={`p-3 rounded-full bg-white bg-opacity-5 backdrop-blur-md border border-white/10 ${
-                  isLiked ? "text-red-400" : "text-gray-300"
-                } hover:bg-white hover:bg-opacity-10 transition-all duration-300`}
-              >
-                <Heart className={`w-6 h-6 ${isLiked ? "fill-current" : ""}`} />
-              </motion.button>
+            {/* Header del producto */}
+            <div className="bg-white rounded-3xl p-6 shadow-xl border border-slate-200">
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex-1">
+                  <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-3 leading-tight">
+                    {productDetails.nombre}
+                  </h1>
+
+                  {/* Rating y reviews */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className={`w-5 h-5 ${
+                            star <= 4
+                              ? "fill-amber-400 text-amber-400"
+                              : "text-slate-300"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-slate-600 text-sm">
+                      (128 reviews)
+                    </span>
+                  </div>
+                </div>
+
+                {/* Acciones rápidas */}
+                <div className="flex gap-2">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setIsLiked(!isLiked)}
+                    className={`p-3 rounded-2xl border transition-all duration-200 ${
+                      isLiked
+                        ? "bg-red-50 border-red-200 text-red-500"
+                        : "bg-white border-slate-200 text-slate-400 hover:border-slate-300"
+                    }`}
+                  >
+                    <Heart
+                      className={`w-6 h-6 ${isLiked ? "fill-current" : ""}`}
+                    />
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="p-3 rounded-2xl border border-slate-200 text-slate-400 hover:border-slate-300 bg-white transition-colors"
+                  >
+                    <Share2 className="w-6 h-6" />
+                  </motion.button>
+                </div>
+              </div>
+
+              <motion.p className="text-slate-900 text-sm leading-relaxed font-medium bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                {productDetails.descripcion}
+              </motion.p>
             </div>
 
-            <div className="flex items-center gap-2">
-              {[...Array(5)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  <Star
-                    className={`w-5 h-5 ${
-                      i < 4 ? "text-yellow-400" : "text-gray-600"
-                    } drop-shadow`}
-                  />
-                </motion.div>
-              ))}
-              <span className="text-gray-300 font-medium">(1 Review)</span>
-            </div>
-
-            <motion.p
-              className="text-gray-200 text-lg leading-relaxed font-medium"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              {productDetails.descripcion}
-            </motion.p>
-
-            <div className="bg-white bg-opacity-5 backdrop-blur-md border border-white/10 p-6 rounded-2xl shadow-2xl">
-              <motion.div
-                className="flex items-baseline gap-2 mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <span className="text-4xl font-extrabold text-red-300 drop-shadow">
-                  Bs.
+            {/* Precio y compra */}
+            <div className="bg-white rounded-3xl p-6 shadow-xl border border-slate-200">
+              <div className="flex items-baseline gap-3 mb-6">
+                <span className="text-4xl font-bold text-slate-900">
+                  Bs.{" "}
                   {productDetails.precio_productos?.[0]?.precio_extra ||
                     productDetails.precio ||
                     "0.00"}
                 </span>
                 {productDetails.precio_productos?.[0]?.precio_extra && (
-                  <span className="text-xl text-gray-500 line-through">
-                    Bs.
+                  <span className="text-lg text-slate-400 line-through">
+                    Bs.{" "}
                     {(
                       parseFloat(
                         productDetails.precio_productos[0].precio_extra
@@ -301,69 +334,58 @@ const ProductDetails: React.FC = () => {
                     ).toFixed(2)}
                   </span>
                 )}
-              </motion.div>
-
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="p-3 rounded-full bg-red-600 text-white hover:bg-red-700 transition-colors shadow-lg"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  >
-                    <Minus className="h-5 w-5" />
-                  </motion.button>
-                  <span className="text-2xl font-bold min-w-[3ch] text-center text-white drop-shadow">
-                    {quantity}
+                {productDetails.precio_productos?.[0]?.precio_extra && (
+                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                    ¡Oferta especial!
                   </span>
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="p-3 rounded-full bg-red-600 text-white hover:bg-red-700 transition-colors shadow-lg"
-                    onClick={() => setQuantity(Math.min(99, quantity + 1))}
-                  >
-                    <Plus className="h-5 w-5" />
-                  </motion.button>
-                </div>
+                )}
+              </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-6">
+                {/* Botones de acción */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full font-bold transition-all duration-300 shadow-lg ${
+                    className={`flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-lg ${
                       addedToCart
-                        ? "bg-green-500 text-white shadow-green-500/50"
-                        : "bg-red-600 hover:bg-red-700 text-white shadow-red-600/50"
+                        ? "bg-green-500 text-white"
+                        : "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700"
                     }`}
                     onClick={handleAddToCart}
                     disabled={addedToCart}
                   >
                     <ShoppingCart className="h-5 w-5" />
-                    {addedToCart ? "¡Añadido!" : "Agregar al Carrito"}
-                  </motion.button>
-
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="px-6 py-3 rounded-full bg-gray-700 text-white font-bold hover:bg-gray-600 transition-all duration-300 shadow-lg shadow-gray-700/50"
-                  >
-                    Comprar Ahora
+                    {addedToCart
+                      ? "¡Agregado al Carrito! 🎉"
+                      : "Agregar al Carrito"}
                   </motion.button>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            {/* Información adicional */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 {
                   label: "Categoría",
                   value: productDetails.categoria?.categoria,
+                  icon: "📦",
                 },
-                { label: "Marca", value: productDetails.marca?.marca },
-                { label: "Tipo", value: productDetails.tipo?.tipo },
                 {
-                  label: "Stock Sucursal 1",
+                  label: "Marca",
+                  value: productDetails.marca?.marca,
+                  icon: "🏷️",
+                },
+                {
+                  label: "Tipo",
+                  value: productDetails.tipo?.tipo,
+                  icon: "🔧",
+                },
+                {
+                  label: "Stock Disponible",
                   value: `${productDetails.stock_sucursal_1} unidades`,
+                  icon: "📊",
                 },
               ].map((item, index) => (
                 <motion.div
@@ -371,26 +393,39 @@ const ProductDetails: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white bg-opacity-5 backdrop-blur-md border border-white/10 p-4 rounded-lg shadow-xl"
+                  className="bg-white rounded-2xl p-4 shadow-lg border border-slate-200 hover:shadow-xl transition-shadow"
                 >
-                  <span className="block font-bold text-red-300 drop-shadow">
-                    {item.label}
-                  </span>
-                  <span className="text-white font-medium">{item.value}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{item.icon}</span>
+                    <div>
+                      <span className="block font-semibold text-slate-700 text-sm">
+                        {item.label}
+                      </span>
+                      <span className="font-medium text-slate-900">
+                        {item.value}
+                      </span>
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </div>
           </motion.div>
         </motion.div>
 
-        {/* Productos relacionados */}
-        <div className="container mx-auto px-4 mt-12">
-          <h2 className="text-3xl font-extrabold mb-6 text-white drop-shadow-lg tracking-tight">
-            Productos Sugerencias
-          </h2>
+        {/* Productos relacionados - Rediseñado */}
+        <div className="mt-16">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">
+              Productos Sugeridos
+            </h2>
+            <p className="text-slate-600 text-lg">
+              Descubre productos similares que te pueden interesar
+            </p>
+          </div>
+
           <motion.div className="relative" whileTap={{ cursor: "grabbing" }}>
             <motion.div
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6"
               drag="x"
               dragConstraints={{ left: -1000, right: 0 }}
               dragElastic={0.2}
@@ -398,21 +433,37 @@ const ProductDetails: React.FC = () => {
               {relatedProducts.slice(0, 5).map((prod) => (
                 <motion.div
                   key={prod.id}
-                  className="relative bg-white bg-opacity-5 backdrop-blur-md border border-white/10 rounded-lg shadow-2xl overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-red-400/50"
+                  className="relative bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl group"
                   onClick={() => manejarClicImagen(prod.id)}
-                  whileHover={{ y: -5 }}
+                  whileHover={{ y: -8 }}
                 >
-                  <div className="p-1">
+                  <div className="p-3">
                     <img
                       src={prod.imageUrl || "/placeholder.svg"}
                       alt={prod.nombre}
-                      className="w-full h-60 object-cover rounded"
+                      className="w-full h-48 object-cover rounded-xl group-hover:scale-110 transition-transform duration-300"
                     />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-slate-900 text-sm line-clamp-2 mb-2 group-hover:text-blue-600 transition-colors">
+                      {prod.nombre}
+                    </h3>
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg font-bold text-slate-900">
+                        Bs. {prod.precio}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                        <span className="text-sm text-slate-600">4.5</span>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               ))}
+
+              {/* Tarjeta "Ver más" */}
               <motion.div
-                className="relative bg-gradient-to-r from-red-600 to-red-800 rounded-lg shadow-2xl overflow-hidden cursor-pointer flex items-center justify-center hover:shadow-red-400/50 transform transition-all duration-300"
+                className="relative bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-lg overflow-hidden cursor-pointer flex items-center justify-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
                 whileHover={{ scale: 1.05 }}
                 onClick={() => {
                   if (productDetails.categoria?.categoria) {
@@ -420,16 +471,17 @@ const ProductDetails: React.FC = () => {
                       productDetails.categoria.categoria
                     );
                     navigate(`/categorias/${categoryName}`);
-                  } else {
-                    console.error("Categoría no encontrada");
                   }
                 }}
               >
-                <div className="text-white text-center p-4">
-                  <h3 className="text-2xl font-extrabold mb-2 drop-shadow-lg">
-                    Ver más
-                  </h3>
-                  <p className="font-medium">Descubre más productos</p>
+                <div className="text-white text-center p-6">
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <Plus className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Ver más</h3>
+                  <p className="text-blue-100 font-medium">
+                    Descubre más productos
+                  </p>
                 </div>
               </motion.div>
             </motion.div>
@@ -444,17 +496,23 @@ const ProductDetails: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center backdrop-blur-sm"
+            className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             onClick={() => setShowZoom(false)}
           >
             <motion.img
-              initial={{ scale: 0.5 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.5 }}
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0 }}
               src={`https://importadoramiranda.com/storage/${productDetails.fotos[selectedImage].foto}`}
               alt={productDetails.nombre}
-              className="max-w-full max-h-full object-contain shadow-2xl rounded-lg"
+              className="max-w-full max-h-full object-contain shadow-2xl rounded-2xl"
             />
+            <button
+              className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
+              onClick={() => setShowZoom(false)}
+            >
+              <span className="text-2xl">×</span>
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

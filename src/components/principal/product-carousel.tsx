@@ -105,7 +105,7 @@ export function ProductCarousel({ products }: { products: Product[] }) {
                         alt={product.nombre}
                         className="object-cover w-full h-full transition-transform duration-500 hover:scale-110"
                       />
-                      <div className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded-md shadow-sm">
+                      <div className="absolute top-2 right-2 bg-cyan-600 text-white text-xs px-2 py-1 rounded-md shadow-sm">
                         Stock: {product.stock}
                       </div>
                     </div>
@@ -122,7 +122,7 @@ export function ProductCarousel({ products }: { products: Product[] }) {
                           .join(" ")}
                       </p>
 
-                      <div className="text-red-600 font-semibold text-lg mb-3">
+                      <div className="text-cyan-600 font-semibold text-lg mb-3">
                         Bs. {product.precio_extra}
                       </div>
 
@@ -130,7 +130,7 @@ export function ProductCarousel({ products }: { products: Product[] }) {
                         onClick={() => handleAddToCart(product)}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.97 }}
-                        className="bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-all shadow-md"
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-all shadow-md"
                       >
                         Comprar ahora
                       </motion.button>
@@ -150,7 +150,7 @@ export function ProductCarousel({ products }: { products: Product[] }) {
                   onClick={() => setCurrentIndex(index)}
                   className={`h-3 rounded-full transition-all duration-300 ${
                     index === currentIndex
-                      ? "w-8 bg-red-600"
+                      ? "w-8 bg-cyan-600"
                       : "w-3 bg-gray-300 hover:bg-gray-400"
                   }`}
                   whileHover={{ scale: 1.1 }}

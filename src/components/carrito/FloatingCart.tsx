@@ -58,11 +58,11 @@ const FloatingCart: React.FC<FloatingCartProps> = ({ isCartOpen, onClose }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4 sm:mb-6 border-b border-gray-700 pb-2 sm:pb-4 px-4 sm:px-6 pt-4 sm:pt-6">
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-red-300">
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-black-300">
                 Tu Carrito
               </h2>
               <button
-                className="text-gray-400 hover:text-red-400 transition-colors"
+                className="text-gray-400 hover:text-black-400 transition-colors"
                 onClick={onClose}
               >
                 <X size={24} />
@@ -131,13 +131,13 @@ const FloatingCart: React.FC<FloatingCartProps> = ({ isCartOpen, onClose }) => {
             <div className="mt-4 pt-2 sm:mt-6 sm:pt-4 border-t border-gray-700 px-4 sm:px-6 pb-4 sm:pb-6">
               <h4 className="text-xl sm:text-2xl font-extrabold flex justify-between items-center mb-2">
                 <span>Total:</span>
-                <span className="text-red-300">Bs.{getTotal()}</span>
+                <span className="text-cyan-300">Bs.{getTotal()}</span>
               </h4>
               <button
                 className={`text-white font-bold py-3 px-4 rounded-full w-full mt-2 sm:mt-4 transition-colors shadow-lg ${
                   isMayoristaRoute
-                    ? "bg-red-600 hover:bg-red-700"
-                    : "bg-red-600 hover:bg-red-700"
+                    ? "bg-cyan-600 hover:bg-cyan-700"
+                    : "bg-cyan-600 hover:bg-cyan-700"
                 }`}
                 onClick={handleCheckout}
               >
