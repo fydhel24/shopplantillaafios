@@ -54,7 +54,7 @@ const FloatingCart: React.FC<FloatingCartProps> = ({ isCartOpen, onClose }) => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="bg-gray-900 text-white rounded-xl shadow-2xl w-full sm:w-96 max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden"
+            className="bg-white text-black rounded-xl shadow-2xl w-full sm:w-96 max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4 sm:mb-6 border-b border-gray-700 pb-2 sm:pb-4 px-4 sm:px-6 pt-4 sm:pt-6">

@@ -135,35 +135,6 @@ const CategoriaProductos: React.FC = () => {
           </p>
         </header>
 
-        <div className="sticky top-20 z-20 bg-white py-2 mb-10 shadow-sm w-full flex justify-end pr-4">
-          <div className="relative w-56 sm:w-64">
-            <input
-              type="text"
-              id="search"
-              aria-label="Buscar productos"
-              placeholder="Buscar..."
-              className="w-full px-4 py-2 rounded-full border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all duration-300 text-sm"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <svg
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-              width="20"
-              height="20"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </div>
-        </div>
-
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 justify-items-center">
           {productosOrdenados.map((producto: Producto) => (
             <div
