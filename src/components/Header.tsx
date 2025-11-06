@@ -383,7 +383,6 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
                 <h1 className="text-xl font-extrabold text-gray-900 tracking-tight">
                   MiraCode Technology
                 </h1>
-                
               </div>
             </Link>
           </motion.div>
@@ -409,9 +408,9 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
 
           <nav className="hidden md:flex items-center space-x-6">
             {[
-              { path: "/", label: "Home" },
-              { path: "/categorias", label: "Categorías" },
+              { path: "/", label: "Inicio" },
               { path: "/todos-productos", label: "Productos" },
+              { path: "/categorias", label: "Categorias" },
               { path: "/promociones", label: "Ofertas" },
             ].map((item) => (
               <Link

@@ -70,72 +70,6 @@ const AnimatedBackground: React.FC = () => {
   );
 };
 
-const SearchBar: React.FC<{
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-}> = ({ searchQuery, setSearchQuery }) => {
-  return (
-    <motion.div
-      className="sticky top-24 z-50 mb-12"
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
-    >
-      <div className="relative max-w-xl mx-auto">
-        <div className="absolute inset-0 bg-white/20 rounded-2xl blur-xl"></div>
-        <div className="relative bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
-          <div className="flex items-center px-6 py-4">
-            <motion.svg
-              className="w-6 h-6 text-gray-500 mr-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </motion.svg>
-            <input
-              type="text"
-              placeholder="Buscar tu categoría favorita..."
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className="flex-1 bg-transparent text-black placeholder-gray-400 text-lg font-medium tracking-wide focus:outline-none"
-            />
-            {searchQuery && (
-              <motion.button
-                onClick={() => setSearchQuery("")}
-                className="ml-4 p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <svg
-                  className="w-5 h-5 text-gray-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </motion.button>
-            )}
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
 
 const ProductGrid: React.FC<{ products: Product[] }> = ({ products }) => {
   return (
@@ -333,7 +267,7 @@ const Categorias: React.FC = () => {
           </p>
         </header>
 
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        
 
         <AnimatePresence>
           <motion.div
