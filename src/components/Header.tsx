@@ -240,17 +240,17 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
     return (
       <form
         onSubmit={handleSearchSubmit}
-        className={`relative ${isFullWidth ? "w-full" : "w-full max-w-md"}`}
+        className={`relative ${isFullWidth ? "w-full" : "w-64"}`}
       >
         <div className="flex items-center relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
           <input
             ref={searchInputRef}
             type="text"
-            placeholder="Buscar productos..."
+            placeholder="Buscar..."
             value={searchQuery}
             onChange={handleSearchInputChange}
-            className="w-full px-4 py-3 pl-10 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 bg-white text-gray-800 placeholder-gray-500 font-medium shadow-sm"
+            className="w-full px-3 py-2 pl-9 pr-8 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 bg-white text-gray-800 placeholder-gray-500 text-sm font-medium shadow-sm"
             autoComplete="off"
             onFocus={() => {
               hasFocus.current = true;
@@ -286,70 +286,68 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
     searchResults: Product[];
     isSearching: boolean;
     onProductSelect: (productId: string | number) => void;
-  }> = ({ searchResults, isSearching, onProductSelect }) => {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.2 }}
-        className="absolute z-50 mt-2 w-full max-w-md bg-white border border-gray-200 rounded-xl shadow-xl overflow-y-auto max-h-96"
-      >
-        <div className="p-4">
-          <div className="flex justify-between items-center border-b border-gray-200 pb-2 mb-3">
-            <h4 className="text-lg font-semibold text-gray-900">
-              {isSearching
-                ? "Buscando..."
-                : `Resultados (${searchResults.length})`}
-            </h4>
-            <button
-              onClick={() => {
-                setShowResults(false);
-                if (searchInputRef.current) {
-                  searchInputRef.current.focus();
-                  hasFocus.current = true;
-                }
-              }}
-              className="text-gray-500 hover:text-gray-800 transition-colors"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-
-          {isSearching ? (
-            <div className="p-4 text-center text-gray-600 font-medium">
-              Buscando...
-            </div>
-          ) : searchResults.length > 0 ? (
-            <div className="grid gap-3">
-              {searchResults.slice(0, 5).map((product) => (
-                <motion.div
-                  key={`product-${product.id}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <SearchResultCard
-                    product={product}
-                    onSelect={onProductSelect}
-                  />
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-6">
-              <p className="text-gray-600 font-medium">
-                No se encontraron productos que coincidan
-              </p>
-              <p className="text-sm text-gray-500 mt-2">
-                Intenta con otras palabras o categorías
-              </p>
-            </div>
-          )}
+  }> = ({ searchResults, isSearching, onProductSelect }) => (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.2 }}
+      className="absolute z-50 mt-2 w-full max-w-md bg-white border border-gray-200 rounded-xl shadow-xl overflow-y-auto max-h-96"
+    >
+      <div className="p-4">
+        <div className="flex justify-between items-center border-b border-gray-200 pb-2 mb-3">
+          <h4 className="text-lg font-semibold text-gray-900">
+            {isSearching
+              ? "Buscando..."
+              : `Resultados (${searchResults.length})`}
+          </h4>
+          <button
+            onClick={() => {
+              setShowResults(false);
+              if (searchInputRef.current) {
+                searchInputRef.current.focus();
+                hasFocus.current = true;
+              }
+            }}
+            className="text-gray-500 hover:text-gray-800 transition-colors"
+          >
+            <X className="h-4 w-4" />
+          </button>
         </div>
-      </motion.div>
-    );
-  };
+
+        {isSearching ? (
+          <div className="p-4 text-center text-gray-600 font-medium">
+            Buscando...
+          </div>
+        ) : searchResults.length > 0 ? (
+          <div className="grid gap-3">
+            {searchResults.slice(0, 5).map((product) => (
+              <motion.div
+                key={`product-${product.id}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                <SearchResultCard
+                  product={product}
+                  onSelect={onProductSelect}
+                />
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-6">
+            <p className="text-gray-600 font-medium">
+              No se encontraron productos que coincidan
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Intenta con otras palabras o categorías
+            </p>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
 
   return (
     <motion.header
@@ -363,36 +361,56 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="flex items-center space-x-4"
-          >
-            <Link to="/" className="flex items-center gap-3">
-              <div className="relative h-12 w-12 sm:h-10 sm:w-10 rounded-full bg-gray-100 border border-gray-200 p-1 flex items-center justify-center overflow-hidden shadow-sm">
-                <img
-                  src="/logo.png"
-                  alt="Importadora Miranda"
-                  className="h-full w-auto object-contain"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "https://via.placeholder.com/40x40?text=IM";
-                  }}
-                />
-              </div>
-              <div className="hidden md:block">
-                <h1 className="text-xl font-extrabold text-gray-900 tracking-tight">
-                  MiraCode Technology
-                </h1>
-              </div>
-            </Link>
-          </motion.div>
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3">
+            <div className="relative h-12 w-12 sm:h-10 sm:w-10 rounded-full bg-gray-100 border border-gray-200 p-1 flex items-center justify-center overflow-hidden shadow-sm">
+              <img
+                src="/logo.png"
+                alt="Importadora Miranda"
+                className="h-full w-auto object-contain"
+              />
+            </div>
+            <div className="hidden md:block">
+              <h1 className="text-xl font-extrabold text-gray-900 tracking-tight">
+                MiraCode Technology
+              </h1>
+            </div>
+          </Link>
 
-          <div className="hidden md:flex flex-1 justify-center px-6">
-            <div className="w-full max-w-xl relative" ref={searchRef}>
+          {/* Menu centrado y buscador a la derecha en escritorio */}
+          <div className="hidden md:flex flex-1 justify-center items-center space-x-8">
+            <nav className="flex space-x-6">
+              {[
+                { path: "/", label: "Home" },
+                { path: "/categorias", label: "Categorías" },
+                { path: "/todos-productos", label: "Productos" },
+                { path: "/promociones", label: "Ofertas" },
+              ].map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`relative group font-semibold tracking-tight ${
+                    currentPath === item.path
+                      ? "text-blue-600 font-bold"
+                      : "text-gray-700 hover:text-blue-600"
+                  } transition-all duration-300`}
+                >
+                  {item.label}
+                  <span
+                    className={`absolute -bottom-1 left-0 w-full h-0.5 bg-blue-500 transform transition-transform duration-300 ${
+                      currentPath === item.path
+                        ? "scale-x-100"
+                        : "scale-x-0 group-hover:scale-x-100"
+                    }`}
+                  />
+                </Link>
+              ))}
+            </nav>
+
+            <div className="relative ml-auto" ref={searchRef}>
               <SearchBar
                 searchQuery={searchQuery}
                 handleSearchInputChange={handleSearchInputChange}
-                isFullWidth={true}
               />
               <AnimatePresence>
                 {showResults && searchQuery.trim() !== "" && (
@@ -406,34 +424,7 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-6">
-            {[
-              { path: "/", label: "Inicio" },
-              { path: "/todos-productos", label: "Productos" },
-              { path: "/categorias", label: "Categorias" },
-              { path: "/promociones", label: "Ofertas" },
-            ].map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`relative group font-semibold tracking-tight ${
-                  currentPath === item.path
-                    ? "text-blue-600 font-bold"
-                    : "text-gray-700 hover:text-blue-600"
-                } transition-all duration-300`}
-              >
-                {item.label}
-                <span
-                  className={`absolute -bottom-1 left-0 w-full h-0.5 bg-blue-500 transform transition-transform duration-300 ${
-                    currentPath === item.path
-                      ? "scale-x-100"
-                      : "scale-x-0 group-hover:scale-x-100"
-                  }`}
-                />
-              </Link>
-            ))}
-          </nav>
-
+          {/* Mobile buttons */}
           <div className="flex md:hidden items-center space-x-4">
             <motion.button
               whileHover={{ scale: 1.1 }}
@@ -460,6 +451,7 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
           </div>
         </div>
 
+        {/* Mobile search and menu remain igual */}
         <AnimatePresence>
           {isMobileSearchOpen && (
             <motion.div
@@ -474,7 +466,6 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
                 handleSearchInputChange={handleSearchInputChange}
                 isFullWidth={true}
               />
-
               <AnimatePresence>
                 {showResults && searchQuery.trim() !== "" && (
                   <SearchResults
@@ -497,9 +488,9 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
               className="md:hidden overflow-hidden bg-white border border-gray-200 rounded-lg mt-2 shadow-md"
             >
               {[
-                { path: "/", label: "Home" },
-                { path: "/categorias", label: "Categorías" },
+                { path: "/", label: "Inicio" },
                 { path: "/todos-productos", label: "Productos" },
+                { path: "/categorias", label: "Categorias" },
                 { path: "/promociones", label: "Ofertas" },
               ].map((item) => (
                 <Link
