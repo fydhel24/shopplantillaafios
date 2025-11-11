@@ -1,8 +1,8 @@
 {
-  "name": "importadoramiranda",
+  "name": "afios",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://shop.importadoramiranda.com",
+  "homepage": "https://shopafios.miracode.tech/",
   "dependencies": {
     "@chakra-ui/react": "^3.22.0",
     "@emotion/react": "^11.14.0",

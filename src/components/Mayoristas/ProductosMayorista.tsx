@@ -66,7 +66,7 @@ const ProductosMayorista: React.FC = () => {
   const fetchProductosMayorista = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://www.afios.miracode.tech/api/lupe/categorias');
+      const response = await axios.get('https://afios.miracode.tech/api/lupe/categorias');
       const productos = response.data.flatMap((categoria: any) => categoria.productos);
       setProductos(productos);
       setFilteredProductos(productos);
