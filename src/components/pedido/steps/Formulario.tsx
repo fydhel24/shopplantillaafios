@@ -99,7 +99,7 @@ const Formulario = () => {
       apiFormData.append("id_usuario", "0");
 
       const apiResponse = await axios.post(
-        "https://afios.miracode.tech/api/pedidos/formulariosucursal2",
+        "https://afios.miracode.tech/api/pedidos/lupenuevo",
         apiFormData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
