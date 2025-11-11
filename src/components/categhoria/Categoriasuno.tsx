@@ -77,7 +77,7 @@ const CategoryCircle: React.FC<{
               >
                 <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-full overflow-hidden border border-gray-300 mb-2">
                   <img
-                    src={`https://importadoramiranda.com/storage/${currentProduct.fotos[0].foto}`}
+                    src={`https://afios.miracode.tech/storage/${currentProduct.fotos[0].foto}`}
                     alt={currentProduct.nombre}
                     className="w-full h-full object-cover"
                   />
@@ -145,7 +145,7 @@ const CategoriasUno: React.FC = () => {
     const fetchCategories = async () => {
       try {
         const { data } = await axios.get(
-          "https://importadoramiranda.com/api/lupe/categorias"
+          "https://afios.miracode.tech/api/lupe/categorias"
         );
         setCategories(data);
       } catch {

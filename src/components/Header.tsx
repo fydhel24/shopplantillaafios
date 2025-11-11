@@ -32,7 +32,7 @@ const SearchResultCard: React.FC<{
 
   const productImage =
     product.fotos && product.fotos.length > 0
-      ? `https://importadoramiranda.com/storage/${product.fotos[0].foto}`
+      ? `https://afios.miracode.tech/storage/${product.fotos[0].foto}`
       : "/placeholder.jpg";
 
   const displayPrice = product.precio_extra || product.precio || "0";
@@ -125,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({ height = "h-16" }) => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `https://importadoramiranda.com/api/lupe/categorias`
+        `https://afios.miracode.tech/api/lupe/categorias`
       );
       if (!response.ok) {
         console.error(`Error: ${response.status} - ${response.statusText}`);

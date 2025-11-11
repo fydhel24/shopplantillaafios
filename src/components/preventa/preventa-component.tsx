@@ -130,7 +130,7 @@ const PreventaModal: React.FC<ModalProps> = ({ producto, isOpen, onClose, onAddT
         <div className="modal-container">
           <div className="modal-imagen">
             {producto.fotos.length > 0 ? (
-              <img src={`https://importadoramiranda.com/storage/${producto.fotos[0].foto}`} alt={producto.nombre} />
+              <img src={`https://afios.miracode.tech/storage/${producto.fotos[0].foto}`} alt={producto.nombre} />
             ) : (
               <div className="no-imagen">Sin imagen</div>
             )}
@@ -237,7 +237,7 @@ export default function PreventaComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://importadoramiranda.com/api/lupe/categorias")
+        const response = await fetch("https://afios.miracode.tech/api/lupe/categorias")
         if (!response.ok) {
           throw new Error("Error al cargar los datos")
         }
@@ -320,7 +320,7 @@ export default function PreventaComponent() {
       id: producto.id,
       name: producto.nombre,
       price: Number(precioPreventa),
-      img: producto.fotos.length > 0 ? `https://importadoramiranda.com/storage/${producto.fotos[0].foto}` : "",
+      img: producto.fotos.length > 0 ? `https://afios.miracode.tech/storage/${producto.fotos[0].foto}` : "",
       discount: producto.precio_descuento && Number(producto.precio_descuento) < Number(producto.precio)
         ? calcularPorcentajeDescuento(producto.precio, producto.precio_descuento)
         : 0,
@@ -379,7 +379,7 @@ export default function PreventaComponent() {
                   <div className="producto-imagen">
                     {producto.fotos.length > 0 ? (
                       <img
-                        src={`https://importadoramiranda.com/storage/${producto.fotos[0].foto}`}
+                        src={`https://afios.miracode.tech/storage/${producto.fotos[0].foto}`}
                         alt={producto.nombre}
                       />
                     ) : (
@@ -409,7 +409,7 @@ export default function PreventaComponent() {
                             id: producto.id,
                             name: producto.nombre,
                             price: Number(getPrecioPreventa(producto)),
-                            img: producto.fotos.length > 0 ? `https://importadoramiranda.com/storage/${producto.fotos[0].foto}` : "",
+                            img: producto.fotos.length > 0 ? `https://afios.miracode.tech/storage/${producto.fotos[0].foto}` : "",
                             discount: producto.precio_descuento && Number(producto.precio_descuento) < Number(producto.precio)
                               ? calcularPorcentajeDescuento(producto.precio, producto.precio_descuento)
                               : 0,
@@ -449,7 +449,7 @@ export default function PreventaComponent() {
                   <div className="producto-badge sinlimite">Preventa Abierta</div>
                   <div className="producto-imagen">
                     {producto.fotos.length > 0 ? (
-                      <img src={`https://importadoramiranda.com/storage/${producto.fotos[0].foto}`} alt={producto.nombre} />
+                      <img src={`https://afios.miracode.tech/storage/${producto.fotos[0].foto}`} alt={producto.nombre} />
                     ) : (
                       <div className="no-imagen">Sin imagen</div>
                     )}
@@ -479,7 +479,7 @@ export default function PreventaComponent() {
                             id: producto.id,
                             name: producto.nombre,
                             price: Number(getPrecioPreventa(producto)),
-                            img: producto.fotos.length > 0 ? `https://importadoramiranda.com/storage/${producto.fotos[0].foto}` : "",
+                            img: producto.fotos.length > 0 ? `https://afios.miracode.tech/storage/${producto.fotos[0].foto}` : "",
                             discount: producto.precio_descuento && Number(producto.precio_descuento) < Number(producto.precio)
                               ? calcularPorcentajeDescuento(producto.precio, producto.precio_descuento)
                               : 0,

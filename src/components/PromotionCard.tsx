@@ -31,7 +31,7 @@ const Promociones: React.FC = () => {
     const fetchPromociones = async () => {
       try {
         const response = await axios.get(
-          "https://importadoramiranda.com/api/promociones"
+          "https://afios.miracode.tech/api/promociones"
         );
         setPromociones(response.data.promociones);
       } catch (err) {
@@ -50,7 +50,7 @@ const Promociones: React.FC = () => {
         name: `${promocion.nombre} - ${producto.nombre}`,
         price: Number.parseFloat(promocion.precio_promocion),
         img: producto.fotos[0]
-          ? `https://importadoramiranda.com/storage/${producto.fotos[0]}`
+          ? `https://afios.miracode.tech/storage/${producto.fotos[0]}`
           : "/placeholder.jpg",
       };
     });
@@ -116,7 +116,7 @@ const Promociones: React.FC = () => {
               new Set(
                 promocion.productos.map((producto) =>
                   producto.fotos.length > 0
-                    ? `https://importadoramiranda.com/storage/${producto.fotos[0]}`
+                    ? `https://afios.miracode.tech/storage/${producto.fotos[0]}`
                     : null
                 )
               )

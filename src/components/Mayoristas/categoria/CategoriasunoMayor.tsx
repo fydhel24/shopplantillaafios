@@ -23,7 +23,7 @@ const AnimatedBackground: React.FC = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <motion.div
-        className="absolute -right-1/4 -top-1/4 w-1/2 h-1/2 rounded-full bg-gradient-to-br from-red-400/20 to-gray-600/15"
+        className="absolute -right-1/4 -top-1/4 w-1/2 h-1/2 rounded-full bg-gradient-to-br from-gray-200/60 to-gray-400/40"
         animate={{
           scale: [1, 1.3, 1],
           x: [0, 40, 0],
@@ -37,7 +37,7 @@ const AnimatedBackground: React.FC = () => {
         }}
       />
       <motion.div
-        className="absolute -left-1/4 -bottom-1/4 w-1/2 h-1/2 rounded-full bg-gradient-to-tr from-red-600/18 to-gray-500/20"
+        className="absolute -left-1/4 -bottom-1/4 w-1/2 h-1/2 rounded-full bg-gradient-to-tr from-gray-300/60 to-gray-500/40"
         animate={{
           scale: [1.2, 0.8, 1.2],
           x: [0, -35, 0],
@@ -66,7 +66,6 @@ const CategoryCircle: React.FC<{
     (p) => p.fotos.length > 0
   );
 
-  // Cambiar producto automáticamente cada 3 segundos
   useEffect(() => {
     if (productsWithImages.length === 0) return;
 
@@ -94,15 +93,15 @@ const CategoryCircle: React.FC<{
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      {/* Círculo principal de la categoría */}
+      {/* Círculo principal */}
       <motion.div
         className="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 xl:w-56 xl:h-56"
         whileHover={{ scale: 1.1, y: -10 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
-        {/* Anillo exterior animado */}
+        {/* Anillo exterior */}
         <motion.div
-          className="absolute inset-0 rounded-full border-4 border-red-400/60"
+          className="absolute inset-0 rounded-full border-4 border-gray-300/60"
           animate={{
             rotate: 360,
             scale: isHovered ? 1.05 : 1,
@@ -117,41 +116,32 @@ const CategoryCircle: React.FC<{
           }}
         />
 
-        {/* Círculo de contenido */}
-        <div className="absolute inset-2 rounded-full overflow-hidden bg-gradient-to-br from-white/15 to-gray-500/10 backdrop-blur-xl border-2 border-white/20 shadow-2xl">
-          {/* Efecto de brillo en hover */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-
-          {/* Producto dentro del círculo */}
+        {/* Contenedor interno */}
+        <div className="absolute inset-2 rounded-full overflow-hidden bg-gradient-to-br from-white to-gray-100 backdrop-blur-xl border-2 border-gray-200 shadow-xl">
           {currentProduct ? (
             <div className="relative w-full h-full flex flex-col items-center justify-center p-4">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`${currentProduct.id}-${currentProductIndex}`}
                   className="flex flex-col items-center justify-center h-full"
-                  initial={{ opacity: 0, scale: 0.8, rotateY: 90 }}
-                  animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, rotateY: -90 }}
-                  transition={{ duration: 0.6 }}
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
                 >
-                  {/* Imagen del producto */}
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full overflow-hidden border-2 border-white/30 shadow-lg mb-2">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full overflow-hidden border-2 border-gray-300 shadow-md mb-2">
                     <img
-                      src={`https://importadoramiranda.com/storage/${currentProduct.fotos[0].foto}`}
+                      src={`https://afios.miracode.tech/storage/${currentProduct.fotos[0].foto}`}
                       alt={currentProduct.nombre}
                       className="w-full h-full object-cover"
                     />
                   </div>
-
-                  {/* Nombre del producto */}
-                  <h4 className="text-white text-xs sm:text-sm font-medium text-center leading-tight mb-1 px-2">
+                  <h4 className="text-gray-800 text-xs sm:text-sm font-bold text-center leading-tight mb-1 px-2">
                     {currentProduct.nombre.length > 20
                       ? `${currentProduct.nombre.substring(0, 20)}...`
                       : currentProduct.nombre}
                   </h4>
-
-                  {/* Precio */}
-                  <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                  <div className="bg-gradient-to-r from-gray-800 to-gray-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
                     Bs.
                     {currentProduct.precio_extra !== "0.00"
                       ? currentProduct.precio_extra
@@ -163,18 +153,15 @@ const CategoryCircle: React.FC<{
               </AnimatePresence>
             </div>
           ) : (
-            // Sin productos
-            <div className="flex items-center justify-center h-full text-white/70 text-sm">
+            <div className="flex items-center justify-center h-full text-gray-500 text-sm">
               Sin productos
             </div>
           )}
 
-          {/* Indicador de cantidad de productos */}
-          <div className="absolute top-2 right-2 bg-red-500/90 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded-full">
+          <div className="absolute top-2 right-2 bg-gray-800 text-white text-xs font-bold px-2 py-1 rounded-full">
             {productsWithImages.length}
           </div>
 
-          {/* Indicadores de progreso */}
           {productsWithImages.length > 1 && (
             <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
               {productsWithImages.map((_, idx) => (
@@ -182,8 +169,8 @@ const CategoryCircle: React.FC<{
                   key={idx}
                   className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                     idx === currentProductIndex
-                      ? "bg-red-400 shadow-lg"
-                      : "bg-white/40"
+                      ? "bg-gray-800"
+                      : "bg-gray-300/60"
                   }`}
                 />
               ))}
@@ -191,31 +178,30 @@ const CategoryCircle: React.FC<{
           )}
         </div>
 
-        {/* Efecto de pulso */}
+        {/* Efecto pulso */}
         <motion.div
-          className="absolute inset-0 rounded-full border-2 border-red-400/0 group-hover:border-red-400/30"
+          className="absolute inset-0 rounded-full border-2 border-gray-400/0 group-hover:border-gray-400/40"
           animate={{
             boxShadow: [
-              "0 0 0 0 rgba(239, 68, 68, 0)",
-              "0 0 0 8px rgba(239, 68, 68, 0.1)",
-              "0 0 0 0 rgba(239, 68, 68, 0)",
+              "0 0 0 0 rgba(107, 114, 128, 0)",
+              "0 0 0 8px rgba(107, 114, 128, 0.15)",
+              "0 0 0 0 rgba(107, 114, 128, 0)",
             ],
           }}
           transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
         />
       </motion.div>
 
-      {/* Nombre de la categoría */}
       <motion.div
         className="mt-4 text-center"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 + 0.3 }}
       >
-        <h3 className="text-white text-sm sm:text-base lg:text-lg font-medium tracking-wide uppercase mb-1">
+        <h3 className="text-gray-800 text-sm sm:text-base lg:text-lg font-bold uppercase mb-1">
           {category.categoria}
         </h3>
-        <div className="text-red-300 text-xs font-light">
+        <div className="text-gray-500 text-xs font-medium">
           {category.productos.length} productos
         </div>
       </motion.div>
@@ -235,7 +221,7 @@ const CategoriasUnoMayor: React.FC = () => {
     const fetchCategories = async () => {
       try {
         const { data } = await axios.get(
-          "https://importadoramiranda.com/api/lupe/categorias"
+          "https://afios.miracode.tech/api/lupe/categorias"
         );
         setCategories(data);
       } catch {
@@ -267,9 +253,9 @@ const CategoriasUnoMayor: React.FC = () => {
 
   if (loading)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-700 to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <motion.div
-          className="text-white text-xl font-light"
+          className="text-gray-800 text-xl font-bold"
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
         >
@@ -280,26 +266,21 @@ const CategoriasUnoMayor: React.FC = () => {
 
   if (error)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-700 to-gray-800 flex items-center justify-center">
-        <div className="text-red-300 text-xl font-light bg-white/10 backdrop-blur-md px-8 py-4 rounded-2xl border border-white/20">
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-gray-800 text-xl font-bold bg-gray-100 px-8 py-4 rounded-2xl border border-gray-300 shadow">
           {error}
         </div>
       </div>
     );
 
   return (
-    <section className="py-20 px-4 md:px-8 lg:px-12 bg-gradient-to-br from-red-900 via-red-700 to-gray-800 text-white relative min-h-screen font-['Inter',_'SF_Pro_Display',_system-ui,_sans-serif]">
+    <section className="py-20 px-4 md:px-8 lg:px-12 bg-white text-gray-900 relative min-h-screen font-['Inter']">
       <AnimatedBackground />
 
-      {/* Overlays para profundidad */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-red-900/15 via-transparent to-gray-800/15"></div>
-
       <div className="container mx-auto relative z-10">
-        {/* Header elegante */}
         <div className="text-center mb-16">
           <motion.div
-            className="text-red-300 font-medium uppercase text-sm tracking-[0.3em] mb-4 font-mono"
+            className="text-gray-500 font-semibold uppercase text-sm tracking-[0.3em] mb-3"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -307,17 +288,15 @@ const CategoriasUnoMayor: React.FC = () => {
             Descubre Nuestro Catálogo
           </motion.div>
           <motion.h2
-            className="text-4xl md:text-6xl font-light tracking-tight leading-tight"
+            className="text-4xl md:text-6xl font-extrabold tracking-tight"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Categorias
-            
+            Categorías
           </motion.h2>
         </div>
 
-        {/* Fila de círculos de categorías */}
         <div className="relative">
           <AnimatePresence mode="wait">
             <motion.div
@@ -339,12 +318,11 @@ const CategoriasUnoMayor: React.FC = () => {
             </motion.div>
           </AnimatePresence>
 
-          {/* Controles de navegación lateral */}
           {totalPages > 1 && (
             <>
               <motion.button
                 onClick={prevPage}
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white p-4 rounded-full shadow-lg border border-white/20 transition-all duration-300"
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-gray-100 hover:bg-gray-200 text-gray-700 p-4 rounded-full shadow-md border border-gray-300 transition-all duration-300"
                 whileHover={{ scale: 1.1, x: -5 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -365,7 +343,7 @@ const CategoriasUnoMayor: React.FC = () => {
 
               <motion.button
                 onClick={nextPage}
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white p-4 rounded-full shadow-lg border border-white/20 transition-all duration-300"
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-gray-100 hover:bg-gray-200 text-gray-700 p-4 rounded-full shadow-md border border-gray-300 transition-all duration-300"
                 whileHover={{ scale: 1.1, x: 5 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -387,7 +365,6 @@ const CategoriasUnoMayor: React.FC = () => {
           )}
         </div>
 
-        {/* Indicadores de página */}
         {totalPages > 1 && (
           <div className="flex justify-center items-center mt-12 space-x-2">
             {Array.from({ length: totalPages }).map((_, index) => (
@@ -396,8 +373,8 @@ const CategoriasUnoMayor: React.FC = () => {
                 onClick={() => setCurrentPage(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentPage
-                    ? "bg-red-400 shadow-lg shadow-red-400/30"
-                    : "bg-white/30 hover:bg-white/50"
+                    ? "bg-gray-800 scale-125 shadow-lg"
+                    : "bg-gray-300 hover:bg-gray-400"
                 }`}
                 whileHover={{ scale: 1.3 }}
                 whileTap={{ scale: 0.9 }}
@@ -406,15 +383,14 @@ const CategoriasUnoMayor: React.FC = () => {
           </div>
         )}
 
-        {/* Botón para ver más */}
         <div className="flex justify-center mt-16">
           <motion.button
-            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-4 px-8 rounded-2xl font-medium shadow-xl transition-all duration-300 border border-white/20 flex items-center space-x-3"
+            className="bg-cyan-600 hover:bg-cyan-700 text-white py-4 px-8 rounded-2xl font-semibold shadow-lg transition-all duration-300 flex items-center space-x-3"
             onClick={() => (window.location.href = "/categorias")}
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="tracking-wide">Explorar Todas las Categorías</span>
+            <span>Explorar Todas las Categorías</span>
             <motion.svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"

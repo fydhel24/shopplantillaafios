@@ -75,7 +75,7 @@ const ProductDetails: React.FC = () => {
       const fetchProductDetails = async () => {
         try {
           const response = await fetch(
-            `https://importadoramiranda.com/api/producto/${productId}`
+            `https://afios.miracode.tech/api/producto/${productId}`
           );
           if (!response.ok)
             throw new Error("Error al obtener los detalles del producto");
@@ -96,7 +96,7 @@ const ProductDetails: React.FC = () => {
       const fetchRelatedProducts = async () => {
         try {
           const response = await fetch(
-            `https://importadoramiranda.com/api/lupe/filtro_categorias?id_categoria=${productDetails.categoria.id}`
+            `https://afios.miracode.tech/api/lupe/filtro_categorias?id_categoria=${productDetails.categoria.id}`
           );
           if (!response.ok)
             throw new Error("Error al obtener productos relacionados");
@@ -108,7 +108,7 @@ const ProductDetails: React.FC = () => {
                 ...prod,
                 imageUrl:
                   prod.fotos.length > 0
-                    ? `https://importadoramiranda.com/storage/${prod.fotos[0].foto}`
+                    ? `https://afios.miracode.tech/storage/${prod.fotos[0].foto}`
                     : "https://via.placeholder.com/150",
               }));
             setRelatedProducts(filteredProducts);
@@ -135,7 +135,7 @@ const ProductDetails: React.FC = () => {
       id: parseInt(productDetails.id),
       name: productDetails.nombre,
       price: parseFloat(precioExtra),
-      img: `https://importadoramiranda.com/storage/${productDetails.fotos[0].foto}`,
+      img: `https://afios.miracode.tech/storage/${productDetails.fotos[0].foto}`,
     };
 
     addToCart(productToAdd);
@@ -212,7 +212,7 @@ const ProductDetails: React.FC = () => {
             >
               {productDetails.fotos?.[selectedImage]?.foto && (
                 <img
-                  src={`https://importadoramiranda.com/storage/${productDetails.fotos[selectedImage].foto}`}
+                  src={`https://afios.miracode.tech/storage/${productDetails.fotos[selectedImage].foto}`}
                   alt={productDetails.nombre}
                   className="w-full h-full object-contain cursor-zoom-in p-4"
                   onClick={() => setShowZoom(true)}
@@ -241,7 +241,7 @@ const ProductDetails: React.FC = () => {
                   }`}
                 >
                   <img
-                    src={`https://importadoramiranda.com/storage/${foto.foto}`}
+                    src={`https://afios.miracode.tech/storage/${foto.foto}`}
                     alt={`${productDetails.nombre} - Vista ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
@@ -503,7 +503,7 @@ const ProductDetails: React.FC = () => {
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
-              src={`https://importadoramiranda.com/storage/${productDetails.fotos[selectedImage].foto}`}
+              src={`https://afios.miracode.tech/storage/${productDetails.fotos[selectedImage].foto}`}
               alt={productDetails.nombre}
               className="max-w-full max-h-full object-contain shadow-2xl rounded-2xl"
             />

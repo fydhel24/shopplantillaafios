@@ -42,7 +42,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, producto }) => {
       if (isOpen && producto?.categoria?.id) {
         try {
           const response = await axios.get(
-            `https://importadoramiranda.com/api/lupe/filtro_categorias?id_categoria=${producto.categoria.id}`
+            `https://afios.miracode.tech/api/lupe/filtro_categorias?id_categoria=${producto.categoria.id}`
           );
           if (response.data?.length > 0 && response.data[0]?.productos) {
             setSugerencias(response.data[0].productos);
@@ -65,7 +65,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, producto }) => {
       name: producto.nombre,
       price: parseFloat(producto.precio_extra),
       img: producto.fotos[0]?.foto
-        ? `https://importadoramiranda.com/storage/${producto.fotos[0].foto}`
+        ? `https://afios.miracode.tech/storage/${producto.fotos[0].foto}`
         : "/placeholder.jpg",
     });
     setAddedToCart(true);
@@ -115,7 +115,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, producto }) => {
               {producto.fotos.map((foto) => (
                 <div key={foto.id}>
                   <img
-                    src={`https://importadoramiranda.com/storage/${foto.foto}`}
+                    src={`https://afios.miracode.tech/storage/${foto.foto}`}
                     alt={producto.nombre}
                     className="w-full h-auto object-cover"
                   />
@@ -182,7 +182,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, producto }) => {
                     >
                       {sugerencia.fotos.length > 0 && (
                         <img
-                          src={`https://importadoramiranda.com/storage/${sugerencia.fotos[0].foto}`}
+                          src={`https://afios.miracode.tech/storage/${sugerencia.fotos[0].foto}`}
                           alt={sugerencia.nombre}
                           className="w-full h-32 object-cover rounded"
                         />

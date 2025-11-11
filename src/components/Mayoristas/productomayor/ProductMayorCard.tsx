@@ -95,7 +95,7 @@ const ProductMayorCard: React.FC<ProductCardProps> = ({
         name: producto.nombre,
         price: price,
         img: producto.fotos[0]?.foto
-          ? `https://importadoramiranda.com/storage/${producto.fotos[0].foto}`
+          ? `https://afios.miracode.tech/storage/${producto.fotos[0].foto}`
           : "/placeholder.jpg",
       });
     } else {
@@ -162,7 +162,7 @@ const ProductMayorCard: React.FC<ProductCardProps> = ({
       ? producto.fotos.map((foto) => (
           <div key={foto.id}>
             <img
-              src={`https://importadoramiranda.com/storage/${foto.foto}`}
+              src={`https://afios.miracode.tech/storage/${foto.foto}`}
               alt={producto.nombre}
               className="w-full h-48 object-cover"
             />
@@ -340,7 +340,7 @@ export default ProductMayorCard;
 //         name: producto.nombre,
 //         price: Number.parseFloat(producto.precio_extra),
 //         img: producto.fotos[0]?.foto
-//           ? `https://importadoramiranda.com/storage/${producto.fotos[0].foto}`
+//           ? `https://afios.miracode.tech/storage/${producto.fotos[0].foto}`
 //           : "/placeholder.jpg",
 //       });
 //     } else {
@@ -385,7 +385,7 @@ export default ProductMayorCard;
 //           {producto.fotos.map((foto) => (
 //             <div key={foto.id}>
 //               <img
-//                 src={`https://importadoramiranda.com/storage/${foto.foto}`}
+//                 src={`https://afios.miracode.tech/storage/${foto.foto}`}
 //                 alt={producto.nombre}
 //                 className="w-full h-48 object-cover"
 //               />

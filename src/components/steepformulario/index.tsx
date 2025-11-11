@@ -150,7 +150,7 @@ const Index: React.FC = () => {
       formData.append('id_usuario', '1');
       formData.append('foto_comprobante', '');
 
-      const response = await axios.post('https://importadoramiranda.com/api/pedidos/lupenuevo', formData, {
+      const response = await axios.post('https://afios.miracode.tech/api/pedidos/lupenuevo', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 

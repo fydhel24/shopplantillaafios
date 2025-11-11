@@ -193,7 +193,7 @@ const Paso1 = ({ formData, onChange, formSubmitted }: Paso1Props) => {
         >
           <div
             style={{
-              background: "linear-gradient(135deg, #37474f, #b71c1c, #ff1744)",
+              background: "linear-gradient(135deg, #004e92, #00c6ff)", 
               borderRadius: "1.5rem",
               padding: "2rem",
               color: "white",
@@ -270,7 +270,7 @@ const Paso1 = ({ formData, onChange, formSubmitted }: Paso1Props) => {
               <button
                 onClick={() => setShowModal(false)}
                 style={{
-                  background: "linear-gradient(135deg, #000000, #ff1744)",
+                  background: "linear-gradient(135deg, #0072ff, #00c6ff)",
                   color: "white",
                   fontWeight: "bold",
                   border: "none",

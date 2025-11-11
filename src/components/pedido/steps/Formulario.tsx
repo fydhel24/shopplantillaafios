@@ -99,7 +99,7 @@ const Formulario = () => {
       apiFormData.append("id_usuario", "0");
 
       const apiResponse = await axios.post(
-        "https://importadoramiranda.com/api/pedidos/formulariosucursal2",
+        "https://afios.miracode.tech/api/pedidos/formulariosucursal2",
         apiFormData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -169,7 +169,7 @@ const Formulario = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 font-sans bg-gradient-to-br from-red-900 via-red-700 to-gray-800 text-white relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 font-sans bg-gradient-to-br from-cyan-900 via-cyan-700 to-gray-800 text-white relative overflow-hidden">
       {/* Estilos CSS para la animación de burbujas */}
       <style>{`
         .bubbles {
@@ -306,10 +306,10 @@ const Formulario = () => {
           <img
             src="/logo.png"
             alt="Logo Empresa Importadora Miranda"
-            className="w-24 h-24 mb-4 object-contain rounded-full border-2 border-red-500 shadow-md"
+            className="w-24 h-24 mb-4 object-contain rounded-full border-2 border-cyan-500 shadow-md"
           />
-          <h1 className="text-2xl sm:text-2xl font-extrabold tracking-tight text-red-400">
-            PEDIDOS ZONA MAYORISTA
+          <h1 className="text-2xl sm:text-2xl font-extrabold tracking-tight text-cyan-400">
+            Pedidos Miracode Technology
           </h1>
         </header>
 
@@ -320,26 +320,26 @@ const Formulario = () => {
             formSubmitted={!!Object.keys(formErrors).length}
           />
           {formErrors.nombre && (
-            <p className="text-red-300 text-sm">{formErrors.nombre}</p>
+            <p className="text-cyan-300 text-sm">{formErrors.nombre}</p>
           )}
           {formErrors.ci && (
-            <p className="text-red-300 text-sm">{formErrors.ci}</p>
+            <p className="text-cyan-300 text-sm">{formErrors.ci}</p>
           )}
           {formErrors.celular && (
-            <p className="text-red-300 text-sm">{formErrors.celular}</p>
+            <p className="text-cyan-300 text-sm">{formErrors.celular}</p>
           )}
           {formErrors.departamento && (
-            <p className="text-red-300 text-sm">{formErrors.departamento}</p>
+            <p className="text-cyan-300 text-sm">{formErrors.departamento}</p>
           )}
           {formErrors.provincia && (
-            <p className="text-red-300 text-sm">{formErrors.provincia}</p>
+            <p className="text-cyan-300 text-sm">{formErrors.provincia}</p>
           )}
 
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-full transition-all duration-300 shadow-lg"
+            className="w-full bg-cyan-600 hover:bg-cyanj-700 text-white font-bold py-3 px-4 rounded-full transition-all duration-300 shadow-lg"
           >
             Enviar Pedido
           </motion.button>

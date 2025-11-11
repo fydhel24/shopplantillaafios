@@ -74,7 +74,7 @@ const CategoriaProductosMayor: React.FC = () => {
   const fetchProductosPorCategoria = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`https://www.importadoramiranda.com/api/lupe/categorias`);
+      const response = await axios.get(`https://www.afios.miracode.tech/api/lupe/categorias`);
       const categoriaEncontrada = response.data.find((categoria: Categoria) =>
         categoria.categoria.toLowerCase() === categoryMayorName?.toLowerCase()
       );

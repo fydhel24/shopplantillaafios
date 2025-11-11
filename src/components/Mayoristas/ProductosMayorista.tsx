@@ -66,7 +66,7 @@ const ProductosMayorista: React.FC = () => {
   const fetchProductosMayorista = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://www.importadoramiranda.com/api/lupe/categorias');
+      const response = await axios.get('https://www.afios.miracode.tech/api/lupe/categorias');
       const productos = response.data.flatMap((categoria: any) => categoria.productos);
       setProductos(productos);
       setFilteredProductos(productos);
@@ -171,7 +171,7 @@ const ProductosMayorista: React.FC = () => {
         {visibleCount < filteredProductos.length && (
           <button
             onClick={showMoreProducts}
-            className="mx-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+            className="mx-2 px-4 py-2 bg-cyan-500 text-white rounded-md hover:bg-cyan-600 transition-colors"
           >
             Ver más
           </button>

@@ -45,7 +45,7 @@ const SolicitudForm: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://importadoramiranda.com/api/solicitudes",
+        "https://afios.miracode.tech/api/solicitudes",
         data,
         {
           headers: {

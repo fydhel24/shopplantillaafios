@@ -159,7 +159,7 @@ const TodosLosProductos: React.FC = () => {
       setLoading(true);
       setError(null);
       const response = await axios.get<any>(
-        "https://www.importadoramiranda.com/api/lupe/categorias"
+        "https://www.afios.miracode.tech/api/lupe/categorias"
       );
 
       const productosCompletos: Producto[] = response.data.flatMap((categoria: any) =>

@@ -55,7 +55,7 @@ const CategoriaProductos: React.FC = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `https://www.importadoramiranda.com/api/lupe/categorias`
+        `https://www.afios.miracode.tech/api/lupe/categorias`
       );
       const categoriaEncontrada = response.data.find(
         (categoria: any) =>

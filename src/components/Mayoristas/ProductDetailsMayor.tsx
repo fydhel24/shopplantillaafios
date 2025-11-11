@@ -87,7 +87,7 @@ const ProductDetailsMayor: React.FC = () => {
     const fetchProductDetails = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`https://importadoramiranda.com/api/producto/${productId}`)
+        const response = await fetch(`https://afios.miracode.tech/api/producto/${productId}`)
         const data = await response.json()
         setProductDetails(data)
       } catch (error) {
@@ -200,7 +200,7 @@ const ProductDetailsMayor: React.FC = () => {
       price: pricePerUnit,
       img:
         productDetails.fotos.length > 0
-          ? `https://importadoramiranda.com/storage/${productDetails.fotos[0].foto}`
+          ? `https://afios.miracode.tech/storage/${productDetails.fotos[0].foto}`
           : "/placeholder.svg?height=200&width=200",
     })
 
@@ -251,7 +251,7 @@ const ProductDetailsMayor: React.FC = () => {
             <motion.div className="relative aspect-square rounded-2xl overflow-hidden bg-white shadow-lg">
               {productDetails?.fotos?.[selectedImage]?.foto && (
                 <img
-                  src={`https://importadoramiranda.com/storage/${productDetails.fotos[selectedImage].foto}`}
+                  src={`https://afios.miracode.tech/storage/${productDetails.fotos[selectedImage].foto}`}
                   alt={productDetails?.nombre}
                   className="w-full h-full object-contain"
                 />
@@ -267,7 +267,7 @@ const ProductDetailsMayor: React.FC = () => {
                   className={`relative aspect-square rounded-lg overflow-hidden ${selectedImage === index ? "ring-2 ring-blue-600" : ""}`}
                 >
                   <img
-                    src={`https://importadoramiranda.com/storage/${foto.foto}`}
+                    src={`https://afios.miracode.tech/storage/${foto.foto}`}
                     alt={`Vista ${index + 1}`}
                     className="w-full h-full object-cover"
                   />

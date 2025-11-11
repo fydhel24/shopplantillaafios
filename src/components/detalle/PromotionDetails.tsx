@@ -42,7 +42,7 @@ const PromotionDetails = () => {
   useEffect(() => {
     const fetchPromotionDetails = async () => {
       try {
-        const response = await fetch(`https://importadoramiranda.com/api/promociones/${promotionId}`);
+        const response = await fetch(`https://afios.miracode.tech/api/promociones/${promotionId}`);
         if (!response.ok) throw new Error('Error al obtener los detalles de la promoción');
         const data = await response.json();
         setPromotionDetails(data.promocion);
@@ -66,7 +66,7 @@ const PromotionDetails = () => {
       name: producto.nombre,
       price: Number.parseFloat(promotionDetails.precio_promocion),
       img: producto.fotos[0]
-        ? `https://importadoramiranda.com/storage/${producto.fotos[0]}`
+        ? `https://afios.miracode.tech/storage/${producto.fotos[0]}`
         : "/placeholder.jpg",
       isPromotion: true,
       promotionDetails: {
@@ -129,7 +129,7 @@ const PromotionDetails = () => {
                       initial={{ scale: 0.8 }}
                       animate={{ scale: 1 }}
                       exit={{ scale: 0.8 }}
-                      src={`https://importadoramiranda.com/storage/${foto}`}
+                      src={`https://afios.miracode.tech/storage/${foto}`}
                       alt={`${producto.nombre} - Vista ${index + 1}`}
                       className="w-full h-full object-cover rounded-lg"
                     />
@@ -222,7 +222,7 @@ const PromotionDetails = () => {
                     className="flex items-center space-x-4 bg-white bg-opacity-10 p-4 rounded-md hover:bg-white hover:bg-opacity-20 transition-colors cursor-pointer"
                   >
                     <img
-                      src={producto.fotos[0] ? `https://importadoramiranda.com/storage/${producto.fotos[0]}` : "/placeholder.jpg"}
+                      src={producto.fotos[0] ? `https://afios.miracode.tech/storage/${producto.fotos[0]}` : "/placeholder.jpg"}
                       alt={producto.nombre}
                       className="w-20 h-20 object-cover rounded-md shadow-md"
                     />

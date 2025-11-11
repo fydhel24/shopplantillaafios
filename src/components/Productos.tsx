@@ -69,7 +69,7 @@ const Productos: React.FC<ProductosProps> = ({ mostrarDestacados = false, produc
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await axios.get('https://importadoramiranda.com/api/lupe/categorias');
+        const response = await axios.get('https://afios.miracode.tech/api/lupe/categorias');
 
         const todosLosProductos: Producto[] = response.data.flatMap((categoria: any) =>
           categoria.productos.map((producto: any) => ({

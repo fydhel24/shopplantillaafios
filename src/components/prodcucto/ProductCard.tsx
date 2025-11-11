@@ -88,7 +88,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         name: producto.nombre,
         price: Number.parseFloat(producto.precio_extra ),
         img: producto.fotos[0]?.foto
-          ? `https://importadoramiranda.com/storage/${producto.fotos[0].foto}`
+          ? `https://afios.miracode.tech/storage/${producto.fotos[0].foto}`
           : "/placeholder.jpg",
       });
     } else {
@@ -187,7 +187,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {producto.fotos.map((foto) => (
               <div key={foto.id}>
                 <img
-                  src={`https://importadoramiranda.com/storage/${foto.foto}`}
+                  src={`https://afios.miracode.tech/storage/${foto.foto}`}
                   alt={producto.nombre}
                   className="w-80 h-48 object-cover"
                 />

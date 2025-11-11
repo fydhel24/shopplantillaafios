@@ -57,7 +57,7 @@ const Paso1: React.FC = () => {
 
       try {
         // Llamada a la API de cupones para obtener la lista de cupones disponibles
-        const response = await axios.get('https://importadoramiranda.com/api/cupos');
+        const response = await axios.get('https://afios.miracode.tech/api/cupos');
         const validCoupon = response.data.find(
           (c: any) => c.codigo === couponCode && c.estado.toUpperCase() === 'ACTIVO'
         );

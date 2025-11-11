@@ -28,7 +28,7 @@ const ProductThumbnail: React.FC<{ product: Product }> = ({ product }) => {
   const [loadFailed, setLoadFailed] = useState(false);
   const primaryImage = product.fotos[0]?.foto?.trim();
   const imageUrl = primaryImage
-    ? `https://importadoramiranda.com/storage/${primaryImage}`
+    ? `https://afios.miracode.tech/storage/${primaryImage}`
     : null;
 
   if (loadFailed || !imageUrl) {
@@ -178,7 +178,7 @@ const ProductCategoryExplorer: React.FC = () => {
     try {
       // ✅ URL corregida: sin espacios
       const { data } = await axios.get<ProductCategory[]>(
-        "https://importadoramiranda.com/api/lupe/categorias"
+        "https://afios.miracode.tech/api/lupe/categorias"
       );
       setCategories(data);
     } catch (err) {

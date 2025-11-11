@@ -44,7 +44,7 @@ const CategoriasUnoMayor: React.FC = () => {
     const fetchCategories = async () => {
       try {
         const { data } = await axios.get(
-          "https://importadoramiranda.com/api/lupe/categorias?sort=created_at&order=desc",
+          "https://afios.miracode.tech/api/lupe/categorias?sort=created_at&order=desc",
         )
 
         console.log("Datos sin procesar:", data)
@@ -124,7 +124,7 @@ const CategoriasUnoMayor: React.FC = () => {
                         <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
                           {producto.fotos.length > 0 ? (
                             <img
-                              src={`https://importadoramiranda.com/storage/${producto.fotos[0].foto}`}
+                              src={`https://afios.miracode.tech/storage/${producto.fotos[0].foto}`}
                               alt={producto.nombre}
                               className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
                             />
